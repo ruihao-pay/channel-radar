@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>通道雷达 · 海外支付通道全景</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Helvetica Neue", Arial, sans-serif; }
+  .gate-pass { background: #d1fae5; color: #065f46; }
+  .gate-cond { background: #fef3c7; color: #92400e; }
+  .gate-fail { background: #fee2e2; color: #991b1b; }
+  .gate-pending { background: #dbeafe; color: #1e40af; }
+  .card { transition: all 0.2s; min-height: 280px; display: flex; flex-direction: column; }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+  .priority-card { background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 100%); border: 2px solid #c084fc !important; position: relative; }
+  .priority-card::before { content: '🏆 闲闲关键候选'; position: absolute; top: -12px; left: 14px; background: linear-gradient(to right, #8b5cf6, #ec4899); color: white; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 9999px; letter-spacing: 0.3px; box-shadow: 0 2px 8px rgba(139,92,246,0.4); }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 500; white-space: nowrap; }
+  .diff-text { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.5em; }
+  .compare-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: #8b5cf6; }
+  .compare-checkbox:checked + label { color: #8b5cf6; font-weight: 600; }
+  .compare-fab { position: fixed; bottom: 24px; right: 24px; background: linear-gradient(to right, #8b5cf6, #ec4899); color: white; padding: 12px 24px; border-radius: 9999px; box-shadow: 0 8px 24px rgba(139,92,246,0.4); cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; z-index: 30; transition: transform 0.2s; }
+  .compare-fab:hover { transform: scale(1.05); }
+  .selected-card { box-shadow: 0 0 0 3px #c084fc !important; }
+  @media (max-width: 640px) { .hide-mobile { display: none; } }
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<!-- Header -->
+<header class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-lg sticky top-0 z-40">
+  <div class="max-w-7xl mx-auto px-4 py-4">
+    <div class="flex items-center justify-between flex-wrap gap-2">
+      <div>
+        <h1 class="text-2xl font-bold flex items-center gap-2">🛰️ 通道雷达</h1>
+        <p class="text-xs opacity-90 mt-1" id="meta-info">加载中...</p>
+      </div>
+      <div class="flex gap-2 text-sm">
+        <a id="feishu-link" href="#" target="_blank" class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-md transition">📋 飞书 Bitable</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Tabs -->
+<div class="bg-white border-b sticky top-[72px] z-30 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex gap-1 overflow-x-auto">
+      <button data-tab="overview" class="tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">📊 总览</button>
+      <button data-tab="xianxian" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-indigo-600 whitespace-nowrap">🎯 闲闲专题</button>
+      <button data-tab="matrix" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-indigo-600 whitespace-nowrap">🗂️ 类型矩阵</button>
+      <button data-tab="stats" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-indigo-600 whitespace-nowrap">📈 统计</button>
+    </div>
+  </div>
+</div>
+
+<!-- Filters -->
+<div id="filters" class="bg-white border-b shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 py-3 grid grid-cols-2 md:grid-cols-6 gap-2">
+    <input type="text" id="search" placeholder="🔍 搜索通道名/HQ/市场/差异化..." class="col-span-2 md:col-span-2 px-3 py-2 border rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
+    <select id="filter-type" class="px-3 py-2 border rounded-md text-sm bg-white">
+      <option value="">所有类型</option>
+    </select>
+    <select id="filter-gate" class="px-3 py-2 border rounded-md text-sm bg-white">
+      <option value="">所有 Gate</option>
+    </select>
+    <select id="filter-rec" class="px-3 py-2 border rounded-md text-sm bg-white">
+      <option value="">所有建议</option>
+    </select>
+    <select id="filter-ai" class="px-3 py-2 border rounded-md text-sm bg-white">
+      <option value="">所有 AI</option>
+      <option value="✅可接">✅ 可接 AI</option>
+      <option value="❌不接">❌ 不接</option>
+      <option value="⏳待问">⏳ 待问</option>
+      <option value="未知">未知</option>
+    </select>
+  </div>
+  <div class="max-w-7xl mx-auto px-4 pb-3 flex items-center justify-between gap-2 flex-wrap">
+    <div class="flex items-center gap-3 text-sm">
+      <span id="count-info" class="text-gray-600 font-medium">共 0 条</span>
+      <button id="reset-filter" class="text-indigo-600 hover:underline text-xs">重置筛选</button>
+      <button id="share-link" class="text-purple-600 hover:underline text-xs">📎 复制带筛选的链接</button>
+    </div>
+    <div class="flex gap-1">
+      <button id="export-csv" class="px-3 py-1 text-xs rounded-md bg-emerald-600 text-white hover:bg-emerald-700">📥 导出 CSV</button>
+      <button id="view-cards" class="view-btn px-3 py-1 text-xs rounded-md bg-indigo-600 text-white">卡片</button>
+      <button id="view-table" class="view-btn px-3 py-1 text-xs rounded-md bg-gray-200 text-gray-700">表格</button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<main class="max-w-7xl mx-auto px-4 py-6">
+  <div id="content"></div>
+</main>
+
+<!-- Detail Modal -->
+<div id="modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onclick="if(event.target===this)closeModal()">
+  <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+    <div id="modal-content"></div>
+  </div>
+</div>
+
+<!-- Compare Modal -->
+<div id="compare-modal" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4" onclick="if(event.target===this)closeCompare()">
+  <div class="bg-white rounded-lg shadow-xl max-w-6xl w-full max-h-[90vh] overflow-y-auto">
+    <div id="compare-content"></div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center text-xs text-gray-500 py-6">
+  锐浩 · Arcane Brilliance Limited · 持续更新中
+</footer>
+
+<script src="data.js"></script>
+<script>
+const data = window.CHANNELS_DATA || [];
+const META = window.META || {};
+let currentTab = 'overview';
+let currentView = 'cards';
+let filtered = [...data];
+let selected = [];
+
+// 维度配置
+const DIMS = [
+  {key:'sub',  label:'订阅', short:'订'},
+  {key:'rate', label:'费率', short:'费'},
+  {key:'market', label:'市场', short:'市'},
+  {key:'cb',   label:'拒付', short:'拒'},
+  {key:'multi',label:'多商户', short:'多'},
+  {key:'settle',label:'账期', short:'期'}
+];
+
+// ============ 初始化 ============
+function init() {
+  document.getElementById('meta-info').textContent = `最后更新: ${META.lastUpdated} · 共 ${META.totalCount} 条通道`;
+  document.getElementById('feishu-link').href = META.feishuUrl;
+  buildFilters();
+  bindEvents();
+  readURLParams();
+  applyFilters();
+}
+
+function buildFilters() {
+  fillSelect('filter-type', [...new Set(data.map(d=>d.type))].sort());
+  fillSelect('filter-gate', [...new Set(data.map(d=>d.gate))].sort());
+  fillSelect('filter-rec',  [...new Set(data.map(d=>d.rec))].sort());
+}
+
+function fillSelect(id, items) {
+  const el = document.getElementById(id);
+  items.forEach(v => {
+    const o = document.createElement('option');
+    o.value = v; o.textContent = v;
+    el.appendChild(o);
+  });
+}
+
+function bindEvents() {
+  ['search','filter-type','filter-gate','filter-rec','filter-ai'].forEach(id => {
+    document.getElementById(id).addEventListener('input', onFilterChange);
+    document.getElementById(id).addEventListener('change', onFilterChange);
+  });
+  document.getElementById('reset-filter').addEventListener('click', () => {
+    document.getElementById('search').value = '';
+    ['filter-type','filter-gate','filter-rec','filter-ai'].forEach(id => document.getElementById(id).value = '');
+    onFilterChange();
+  });
+  document.getElementById('share-link').addEventListener('click', shareLink);
+  document.getElementById('export-csv').addEventListener('click', exportCSV);
+  document.getElementById('view-cards').addEventListener('click', () => setView('cards'));
+  document.getElementById('view-table').addEventListener('click', () => setView('table'));
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => setTab(btn.dataset.tab));
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeModal(); closeCompare(); }
+  });
+}
+
+function onFilterChange() {
+  applyFilters();
+  updateURL();
+}
+
+// ============ URL 状态 ============
+function readURLParams() {
+  const p = new URLSearchParams(location.search);
+  if (p.get('tab')) {
+    currentTab = p.get('tab');
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      if (b.dataset.tab === currentTab) { b.classList.add('border-indigo-600','text-indigo-600'); b.classList.remove('border-transparent','text-gray-600'); }
+      else { b.classList.remove('border-indigo-600','text-indigo-600'); b.classList.add('border-transparent','text-gray-600'); }
+    });
+  }
+  if (p.get('view')) currentView = p.get('view');
+  ['search','filter-type','filter-gate','filter-rec','filter-ai'].forEach(id => {
+    const v = p.get(id);
+    if (v) document.getElementById(id).value = v;
+  });
+}
+
+function updateURL() {
+  const params = new URLSearchParams();
+  if (currentTab !== 'overview') params.set('tab', currentTab);
+  if (currentView !== 'cards') params.set('view', currentView);
+  ['search','filter-type','filter-gate','filter-rec','filter-ai'].forEach(id => {
+    const v = document.getElementById(id).value;
+    if (v) params.set(id, v);
+  });
+  const s = params.toString();
+  history.replaceState(null, '', s ? '?' + s : location.pathname);
+}
+
+function shareLink() {
+  updateURL();
+  navigator.clipboard.writeText(location.href).then(() => {
+    const btn = document.getElementById('share-link');
+    const orig = btn.textContent;
+    btn.textContent = '✓ 已复制';
+    setTimeout(() => btn.textContent = orig, 1500);
+  });
+}
+
+// ============ Tab / View ============
+function setTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (b.dataset.tab === tab) { b.classList.add('border-indigo-600','text-indigo-600'); b.classList.remove('border-transparent','text-gray-600'); }
+    else { b.classList.remove('border-indigo-600','text-indigo-600'); b.classList.add('border-transparent','text-gray-600'); }
+  });
+  applyFilters();
+  updateURL();
+}
+
+function setView(v) {
+  currentView = v;
+  document.getElementById('view-cards').className = `view-btn px-3 py-1 text-xs rounded-md ${v==='cards'?'bg-indigo-600 text-white':'bg-gray-200 text-gray-700'}`;
+  document.getElementById('view-table').className = `view-btn px-3 py-1 text-xs rounded-md ${v==='table'?'bg-indigo-600 text-white':'bg-gray-200 text-gray-700'}`;
+  render();
+  updateURL();
+}
+
+// ============ Filter ============
+function applyFilters() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const ft = document.getElementById('filter-type').value;
+  const fg = document.getElementById('filter-gate').value;
+  const fr = document.getElementById('filter-rec').value;
+  const fa = document.getElementById('filter-ai').value;
+
+  filtered = data.filter(d => {
+    if (q && !(`${d.name} ${d.hq||''} ${d.max_market||''} ${d.coverage||''} ${d.diff||''} ${d.type||''}`).toLowerCase().includes(q)) return false;
+    if (ft && d.type !== ft) return false;
+    if (fg && d.gate !== fg) return false;
+    if (fr && d.rec !== fr) return false;
+    if (fa && d.ai !== fa) return false;
+    return true;
+  });
+
+  if (currentTab === 'xianxian') {
+    filtered = filtered.filter(d => d.ai === '✅可接' || d.ai === '⏳待问');
+  }
+
+  document.getElementById('count-info').textContent = `共 ${filtered.length} 条`;
+  render();
+}
+
+// ============ Render ============
+function render() {
+  const root = document.getElementById('content');
+  if (currentTab === 'matrix') return renderMatrix(root);
+  if (currentTab === 'stats') return renderStats(root);
+  if (currentTab === 'xianxian') return renderXianxian(root);
+  if (currentView === 'table') return renderTable(root);
+  return renderCards(root);
+}
+
+function gateClass(gate) {
+  if (gate.startsWith('✅')) return 'gate-pass';
+  if (gate.startsWith('⚠️')) return 'gate-cond';
+  if (gate.startsWith('❌')) return 'gate-fail';
+  if (gate.startsWith('⏳')) return 'gate-pending';
+  return 'bg-gray-100 text-gray-700';
+}
+
+function aiClass(ai) {
+  if (ai === '✅可接') return 'bg-green-100 text-green-800 font-semibold';
+  if (ai === '❌不接') return 'bg-red-100 text-red-700';
+  if (ai === '⏳待问') return 'bg-yellow-100 text-yellow-800';
+  return 'bg-gray-100 text-gray-600';
+}
+
+function recClass(rec) {
+  if (rec.includes('🏆')) return 'bg-purple-200 text-purple-900 font-bold';
+  if (rec.includes('🟢')) return 'bg-green-100 text-green-800 font-semibold';
+  if (rec.includes('P2')) return 'bg-blue-100 text-blue-800';
+  if (rec.includes('观察')) return 'bg-indigo-50 text-indigo-700';
+  if (rec.includes('备选')) return 'bg-gray-100 text-gray-700';
+  if (rec.includes('❌')) return 'bg-red-50 text-red-600';
+  if (rec.includes('搁置')) return 'bg-yellow-50 text-yellow-700';
+  return 'bg-gray-100 text-gray-700';
+}
+
+function scoreColor(v) {
+  if (v >= 8) return 'bg-emerald-500';
+  if (v >= 6) return 'bg-green-500';
+  if (v >= 4) return 'bg-yellow-400';
+  if (v >= 2) return 'bg-orange-400';
+  return 'bg-red-400';
+}
+
+function scoreBars(d) {
+  return `<div class="grid grid-cols-6 gap-1 text-[10px] mt-2">${DIMS.map(({key,short}) => {
+    const v = d[key] || 0;
+    return `<div class="text-center" title="${DIMS.find(x=>x.key===key).label}: ${v}">
+      <div class="text-gray-400 mb-0.5">${short}</div>
+      <div class="h-1.5 bg-gray-100 rounded">
+        <div class="h-1.5 ${scoreColor(v)} rounded transition-all" style="width: ${v*10}%"></div>
+      </div>
+      <div class="text-gray-600 mt-0.5 font-mono text-[10px]">${v}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function isSelected(idx) { return selected.indexOf(idx) >= 0; }
+
+function toggleSelect(idx, e) {
+  e.stopPropagation();
+  const i = selected.indexOf(idx);
+  if (i >= 0) selected.splice(i, 1);
+  else if (selected.length < 4) selected.push(idx);
+  else { alert('最多对比 4 个通道'); return; }
+  updateCompareFAB();
+  render();
+}
+
+function updateCompareFAB() {
+  let btn = document.getElementById('compare-fab');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'compare-fab';
+    btn.className = 'compare-fab';
+    btn.onclick = openCompare;
+    document.body.appendChild(btn);
+  }
+  if (selected.length >= 2) {
+    btn.innerHTML = `<span>📊 对比 ${selected.length} 条</span><span class="text-xs opacity-80">·清空</span>`;
+    btn.style.display = '';
+  } else {
+    btn.style.display = 'none';
+  }
+}
+
+function clearCompare() {
+  selected = [];
+  updateCompareFAB();
+  render();
+}
+
+function renderCards(root) {
+  if (filtered.length === 0) return root.innerHTML = '<p class="text-center text-gray-400 py-12">没有匹配的通道</p>';
+
+  const sorted = [...filtered].sort((a,b) => {
+    const ra = a.rec.includes('🏆')?100 : a.rec.includes('🟢')?80 : a.rec.includes('P2')?50 : a.rec.includes('观察')?40 : a.rec.includes('备选')?30 : a.rec.includes('搁置')?20 : 10;
+    const rb = b.rec.includes('🏆')?100 : b.rec.includes('🟢')?80 : b.rec.includes('P2')?50 : b.rec.includes('观察')?40 : b.rec.includes('备选')?30 : b.rec.includes('搁置')?20 : 10;
+    if (ra !== rb) return rb - ra;
+    return (b.biz1||0) + (b.biz2||0) - (a.biz1||0) - (a.biz2||0);
+  });
+
+  root.innerHTML = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">` +
+    sorted.map(d => {
+      const idx = data.indexOf(d);
+      const isPriority = d.rec.includes('🏆');
+      return `
+      <div class="card ${isPriority?'priority-card':'bg-white border'} ${isSelected(idx)?'selected-card':''} rounded-lg shadow-sm p-4 cursor-pointer relative" onclick='showDetail(${idx})'>
+        <div class="absolute top-3 right-3" onclick='event.stopPropagation()'>
+          <input type="checkbox" class="compare-checkbox" ${isSelected(idx)?'checked':''} onchange='toggleSelect(${idx}, event)' title="选中对比">
+        </div>
+        <div class="flex items-start justify-between gap-2 mb-2 pr-8">
+          <h3 class="font-semibold text-gray-900 text-base leading-tight">${d.name}</h3>
+        </div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="badge ${aiClass(d.ai)}">${d.ai}</span>
+          <span class="text-xs text-gray-500">${d.type} · ${d.hq||'—'}</span>
+        </div>
+        <div class="flex flex-wrap gap-1 mb-2">
+          <span class="badge ${gateClass(d.gate)}">${d.gate}</span>
+          <span class="badge ${recClass(d.rec)}">${d.rec}</span>
+          <span class="badge bg-gray-100 text-gray-700">HK ${d.hk}</span>
+        </div>
+        <div class="text-xs text-gray-600 diff-text mb-2 flex-grow">${d.diff||'—'}</div>
+        ${scoreBars(d)}
+        <div class="grid grid-cols-2 gap-2 text-xs mt-3 pt-3 border-t border-gray-100">
+          <div><span class="text-gray-500">业务一</span> <span class="font-mono font-semibold text-gray-900 ml-1">${(d.biz1||0).toFixed(2)}</span></div>
+          <div><span class="text-gray-500">业务二</span> <span class="font-mono font-semibold text-gray-900 ml-1">${(d.biz2||0).toFixed(2)}</span></div>
+        </div>
+      </div>
+    `;}).join('') + `</div>`;
+}
+
+function renderTable(root) {
+  if (filtered.length === 0) return root.innerHTML = '<p class="text-center text-gray-400 py-12">没有匹配的通道</p>';
+
+  const sorted = [...filtered].sort((a,b) => (b.biz1||0)-(a.biz1||0));
+
+  root.innerHTML = `
+    <div class="bg-white rounded-lg shadow-sm border overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 text-xs uppercase text-gray-600 sticky top-0">
+          <tr>
+            <th class="px-2 py-2 text-center w-10">选</th>
+            <th class="px-3 py-2 text-left">通道名</th>
+            <th class="px-3 py-2 text-left">类型</th>
+            <th class="px-3 py-2 text-left">Gate</th>
+            <th class="px-3 py-2 text-left">建议</th>
+            <th class="px-3 py-2 text-center">AI</th>
+            <th class="px-3 py-2 text-center hide-mobile">HK</th>
+            <th class="px-3 py-2 text-right">业务一</th>
+            <th class="px-3 py-2 text-right">业务二</th>
+            <th class="px-3 py-2 text-left hide-mobile">差异化</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sorted.map(d => {
+            const idx = data.indexOf(d);
+            const isPriority = d.rec.includes('🏆');
+            return `
+            <tr class="border-t hover:bg-gray-50 cursor-pointer ${isPriority?'bg-purple-50':''}" onclick='showDetail(${idx})'>
+              <td class="px-2 py-2 text-center" onclick='event.stopPropagation()'><input type="checkbox" class="compare-checkbox" ${isSelected(idx)?'checked':''} onchange='toggleSelect(${idx}, event)'></td>
+              <td class="px-3 py-2 font-medium text-gray-900">${d.name}</td>
+              <td class="px-3 py-2 text-gray-600 text-xs">${d.type}</td>
+              <td class="px-3 py-2"><span class="badge ${gateClass(d.gate)}">${d.gate}</span></td>
+              <td class="px-3 py-2"><span class="badge ${recClass(d.rec)}">${d.rec}</span></td>
+              <td class="px-3 py-2 text-center"><span class="badge ${aiClass(d.ai)}">${d.ai}</span></td>
+              <td class="px-3 py-2 text-center hide-mobile">${d.hk}</td>
+              <td class="px-3 py-2 text-right font-mono text-xs">${(d.biz1||0).toFixed(2)}</td>
+              <td class="px-3 py-2 text-right font-mono text-xs">${(d.biz2||0).toFixed(2)}</td>
+              <td class="px-3 py-2 text-xs text-gray-600 hide-mobile max-w-xs truncate" title="${d.diff||''}">${d.diff||'—'}</td>
+            </tr>
+          `;}).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderXianxian(root) {
+  const t1 = filtered.filter(d => d.ai === '✅可接' && d.hk === '✅' && d.gate.startsWith('✅'));
+  const t2 = filtered.filter(d => d.ai === '✅可接' && !(d.hk === '✅' && d.gate.startsWith('✅')));
+  const t3 = filtered.filter(d => d.ai === '⏳待问');
+
+  const card = (d) => {
+    const idx = data.indexOf(d);
+    const isPriority = d.rec.includes('🏆');
+    return `
+    <div class="card ${isPriority?'priority-card':'bg-white border'} ${isSelected(idx)?'selected-card':''} rounded-lg shadow-sm p-4 cursor-pointer relative" onclick='showDetail(${idx})'>
+      <div class="absolute top-3 right-3" onclick='event.stopPropagation()'>
+        <input type="checkbox" class="compare-checkbox" ${isSelected(idx)?'checked':''} onchange='toggleSelect(${idx}, event)'>
+      </div>
+      <div class="flex items-start justify-between gap-2 mb-2 pr-8">
+        <h3 class="font-semibold text-gray-900">${d.name}</h3>
+      </div>
+      <div class="flex items-center gap-2 mb-2">
+        <span class="badge ${recClass(d.rec)}">${d.rec}</span>
+        <span class="text-xs text-gray-500">${d.type}</span>
+      </div>
+      <div class="text-xs text-gray-600 diff-text mb-2 flex-grow">${d.diff||'—'}</div>
+      <div class="flex gap-1 flex-wrap">
+        <span class="badge ${gateClass(d.gate)}">${d.gate}</span>
+        <span class="badge bg-gray-100 text-gray-700">HK ${d.hk}</span>
+      </div>
+      ${scoreBars(d)}
+    </div>
+  `;};
+
+  root.innerHTML = `
+    <div class="space-y-6">
+      <div class="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-5">
+        <h2 class="font-bold text-lg text-purple-900 mb-2">🎯 闲闲（AI 陪聊）适配筛选</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm mt-3">
+          <div class="bg-white/60 rounded p-3 text-center"><div class="text-xs text-purple-700 mb-1">Gate①</div><div class="font-semibold text-purple-900">接 AI 陪聊</div></div>
+          <div class="bg-white/60 rounded p-3 text-center"><div class="text-xs text-purple-700 mb-1">Gate②</div><div class="font-semibold text-purple-900">HK 直签</div></div>
+          <div class="bg-white/60 rounded p-3 text-center"><div class="text-xs text-purple-700 mb-1">Gate③</div><div class="font-semibold text-purple-900">Gate PASS</div></div>
+          <div class="bg-white/60 rounded p-3 text-center"><div class="text-xs text-purple-700 mb-1">Gate④</div><div class="font-semibold text-purple-900">订阅功能 ≥ 5</div></div>
+        </div>
+        <p class="text-xs text-purple-600 mt-3">候选分布：T1 完全适配 ${t1.length} · T2 部分适配 ${t2.length} · T3 待评估 ${t3.length}</p>
+      </div>
+
+      <div>
+        <h3 class="font-bold text-green-700 mb-3 flex items-center gap-2">🏆 T1 — 全适配候选（${t1.length}）<span class="text-xs font-normal text-gray-500">立即可接触</span></h3>
+        ${t1.length ? `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">${t1.map(card).join('')}</div>` : '<p class="text-gray-400 text-sm">无</p>'}
+      </div>
+
+      <div>
+        <h3 class="font-bold text-yellow-700 mb-3 flex items-center gap-2">⚠️ T2 — 部分适配（${t2.length}）<span class="text-xs font-normal text-gray-500">有限制，需具体确认</span></h3>
+        ${t2.length ? `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">${t2.map(card).join('')}</div>` : '<p class="text-gray-400 text-sm">无</p>'}
+      </div>
+
+      <div>
+        <h3 class="font-bold text-blue-700 mb-3 flex items-center gap-2">⏳ T3 — 待评估（${t3.length}）<span class="text-xs font-normal text-gray-500">需问 AI 陪聊类目接受度</span></h3>
+        ${t3.length ? `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">${t3.map(card).join('')}</div>` : '<p class="text-gray-400 text-sm">无</p>'}
+      </div>
+
+      <div class="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm">
+        <h4 class="font-bold text-amber-900 mb-2">💡 关键提示</h4>
+        <ul class="space-y-1 text-amber-800 text-xs list-disc pl-5">
+          <li>领航主体寿命 6-12 月，需在窗口内拿到至少 1 个备份通道 alive</li>
+          <li>主流大牌（Stripe/Adyen/Worldpay 等 11 家）对 AI 陪聊全军覆没，别再耗时间</li>
+          <li>CCBill/Segpay/Epoch 在 5-6 因"英文成本"搁置，现在无退路必须重启</li>
+          <li>加密支付（NOWPayments）可作辅助通道储备 5-10% 流量</li>
+        </ul>
+      </div>
+    </div>
+  `;
+}
+
+function renderMatrix(root) {
+  const types = [...new Set(filtered.map(d=>d.type))].sort();
+  const gates = ['✅ PASS', '⚠️ 条件PASS', '⚠️ 部分FAIL', '❌ FAIL', '⏳ 待评'];
+
+  const matrix = {};
+  types.forEach(t => {
+    matrix[t] = {};
+    gates.forEach(g => { matrix[t][g] = filtered.filter(d => d.type === t && d.gate === g); });
+  });
+
+  root.innerHTML = `
+    <div class="bg-white rounded-lg shadow-sm border overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-3 py-2 text-left text-xs uppercase text-gray-600">类型 \\ Gate</th>
+            ${gates.map(g => `<th class="px-3 py-2 text-center text-xs"><span class="badge ${gateClass(g)}">${g}</span></th>`).join('')}
+            <th class="px-3 py-2 text-right text-xs uppercase text-gray-600">合计</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${types.map(t => {
+            const rowTotal = gates.reduce((sum, g) => sum + matrix[t][g].length, 0);
+            return `
+              <tr class="border-t">
+                <td class="px-3 py-2 font-medium text-gray-700">${t}</td>
+                ${gates.map(g => {
+                  const cell = matrix[t][g];
+                  if (cell.length === 0) return `<td class="px-3 py-2 text-center text-gray-300">—</td>`;
+                  return `<td class="px-3 py-2 text-center">
+                    <div class="font-mono text-base font-semibold">${cell.length}</div>
+                    <div class="text-xs text-gray-500 mt-1">${cell.map(c=>c.name).join(', ')}</div>
+                  </td>`;
+                }).join('')}
+                <td class="px-3 py-2 text-right font-mono font-semibold">${rowTotal}</td>
+              </tr>
+            `;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
+function renderStats(root) {
+  const total = filtered.length;
+  const by = (k) => { const m={}; filtered.forEach(d => m[d[k]] = (m[d[k]]||0)+1); return m; };
+  const byGate = by('gate'), byRec = by('rec'), byAI = by('ai'), byType = by('type');
+
+  const renderBar = (obj, colorFn) => Object.entries(obj).sort((a,b)=>b[1]-a[1]).map(([k,v]) => `
+    <div class="mb-2">
+      <div class="flex justify-between text-xs mb-1">
+        <span class="text-gray-700">${k}</span>
+        <span class="font-mono text-gray-500">${v} (${(v/total*100).toFixed(0)}%)</span>
+      </div>
+      <div class="h-2 bg-gray-100 rounded">
+        <div class="h-2 ${colorFn(k)} rounded transition-all" style="width:${v/total*100}%"></div>
+      </div>
+    </div>
+  `).join('');
+
+  const gateColor = k => k.startsWith('✅')?'bg-emerald-500':k.startsWith('⚠️')?'bg-yellow-500':k.startsWith('❌')?'bg-red-500':'bg-blue-500';
+  const aiColor = k => k==='✅可接'?'bg-emerald-500':k==='❌不接'?'bg-red-500':k==='⏳待问'?'bg-yellow-500':'bg-gray-400';
+  const recColor = k => k.includes('🏆')?'bg-purple-500':k.includes('🟢')?'bg-green-500':k.includes('P2')?'bg-blue-500':k.includes('观察')?'bg-indigo-400':k.includes('备选')?'bg-gray-400':k.includes('❌')?'bg-red-400':'bg-yellow-400';
+
+  root.innerHTML = `
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-white rounded-lg shadow-sm border p-5">
+        <h3 class="font-bold text-gray-900 mb-3">按 Gate 状态（${total} 条）</h3>
+        ${renderBar(byGate, gateColor)}
+      </div>
+      <div class="bg-white rounded-lg shadow-sm border p-5">
+        <h3 class="font-bold text-gray-900 mb-3">按建议</h3>
+        ${renderBar(byRec, recColor)}
+      </div>
+      <div class="bg-white rounded-lg shadow-sm border p-5">
+        <h3 class="font-bold text-gray-900 mb-3">按 AI 陪聊接受度</h3>
+        ${renderBar(byAI, aiColor)}
+      </div>
+      <div class="bg-white rounded-lg shadow-sm border p-5">
+        <h3 class="font-bold text-gray-900 mb-3">按类型 Top 10</h3>
+        ${Object.entries(byType).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([k,v]) => `
+          <div class="flex justify-between text-sm py-1 border-b last:border-b-0">
+            <span class="text-gray-700">${k}</span>
+            <span class="font-mono text-gray-500">${v}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ============ 详情 Modal ============
+function showDetail(idx) {
+  const d = data[idx];
+  if (!d) return;
+  const scoreRow = (k, v) => `<div><div class="text-xs text-gray-500">${k}</div><div class="font-mono text-lg font-semibold">${v||'—'}</div></div>`;
+
+  document.getElementById('modal-content').innerHTML = `
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-5 rounded-t-lg">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-2xl font-bold">${d.name}</h2>
+          <p class="text-sm opacity-90 mt-1">${d.type} · ${d.hq||'—'}</p>
+        </div>
+        <button onclick="closeModal()" class="text-white/80 hover:text-white text-2xl leading-none">×</button>
+      </div>
+      <div class="flex flex-wrap gap-2 mt-3">
+        <span class="badge ${gateClass(d.gate)}">${d.gate}</span>
+        <span class="badge ${recClass(d.rec)}">${d.rec}</span>
+        <span class="badge ${aiClass(d.ai)}">AI: ${d.ai}</span>
+        <span class="badge bg-white/20 text-white">HK ${d.hk}</span>
+        <span class="badge bg-white/20 text-white">${d.driver}</span>
+      </div>
+    </div>
+    <div class="p-5 space-y-4">
+      <div>
+        <h3 class="text-sm font-bold text-gray-700 mb-2">核心差异化</h3>
+        <p class="text-sm text-gray-700 leading-relaxed">${d.diff||'—'}</p>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold text-gray-700 mb-2">市场覆盖</h3>
+        <div class="text-sm text-gray-700"><strong>最大市场：</strong>${d.max_market||'—'}<br><strong>覆盖地区：</strong>${d.coverage||'—'}</div>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold text-gray-700 mb-2">综合评分</h3>
+        <div class="grid grid-cols-2 gap-3">
+          ${scoreRow('业务一综合', (d.biz1||0).toFixed(2))}
+          ${scoreRow('业务二综合', (d.biz2||0).toFixed(2))}
+        </div>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold text-gray-700 mb-2">维度评分</h3>
+        <div class="grid grid-cols-3 gap-3 text-sm">
+          ${DIMS.map(({key,label}) => scoreRow(label, d[key])).join('')}
+        </div>
+      </div>
+      <div>
+        <h3 class="text-sm font-bold text-gray-700 mb-2">接入信息</h3>
+        <div class="text-sm text-gray-700 space-y-1">
+          <div><strong>接入成本：</strong>${d.cost||'—'}</div>
+          <div><strong>战略窗口：</strong>${d.window}</div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+
+// ============ 对比 Modal ============
+function openCompare() {
+  if (selected.length < 2) return;
+  const items = selected.map(i => data[i]);
+  const rows = [
+    ['通道名', items.map(d => `<strong>${d.name}</strong>`)],
+    ['类型', items.map(d => d.type)],
+    ['HQ', items.map(d => d.hq||'—')],
+    ['最大市场', items.map(d => d.max_market||'—')],
+    ['覆盖地区', items.map(d => d.coverage||'—')],
+    ['Gate', items.map(d => `<span class="badge ${gateClass(d.gate)}">${d.gate}</span>`)],
+    ['建议', items.map(d => `<span class="badge ${recClass(d.rec)}">${d.rec}</span>`)],
+    ['驱动级', items.map(d => d.driver)],
+    ['AI 陪聊', items.map(d => `<span class="badge ${aiClass(d.ai)}">${d.ai}</span>`)],
+    ['HK 直签', items.map(d => d.hk)],
+    ['接入成本', items.map(d => d.cost||'—')],
+    ['战略窗口', items.map(d => d.window)],
+    ...DIMS.map(({key,label}) => [label, items.map(d => `<div class="flex items-center gap-2"><span class="font-mono font-semibold">${d[key]||0}</span><div class="flex-1 h-1.5 bg-gray-100 rounded"><div class="h-1.5 ${scoreColor(d[key]||0)} rounded" style="width:${(d[key]||0)*10}%"></div></div></div>`)]),
+    ['业务一综合', items.map(d => `<span class="font-mono font-bold text-lg">${(d.biz1||0).toFixed(2)}</span>`)],
+    ['业务二综合', items.map(d => `<span class="font-mono font-bold text-lg">${(d.biz2||0).toFixed(2)}</span>`)],
+    ['核心差异化', items.map(d => `<div class="text-xs leading-relaxed">${d.diff||'—'}</div>`)]
+  ];
+
+  // 找出每行的差异
+  const rowDiffs = rows.map(([label, vals]) => {
+    const stripped = vals.map(v => typeof v === 'string' ? v.replace(/<[^>]+>/g,'').trim() : v);
+    const allSame = stripped.every(v => v === stripped[0]);
+    return !allSame;
+  });
+
+  document.getElementById('compare-content').innerHTML = `
+    <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white p-5 rounded-t-lg sticky top-0 z-10">
+      <div class="flex items-start justify-between">
+        <div>
+          <h2 class="text-xl font-bold">📊 通道对比 (${items.length})</h2>
+          <p class="text-xs opacity-90 mt-1">${items.map(d=>d.name).join(' · ')}</p>
+        </div>
+        <button onclick="closeCompare()" class="text-white/80 hover:text-white text-2xl leading-none">×</button>
+      </div>
+    </div>
+    <div class="p-4">
+      <div class="flex justify-end mb-3 gap-2">
+        <button onclick="clearCompare();closeCompare();" class="text-xs text-red-600 hover:underline">清空选择</button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="border px-3 py-2 text-left text-xs uppercase text-gray-600 sticky left-0 bg-gray-50">维度</th>
+              ${items.map(d => `<th class="border px-3 py-2 text-left">${d.name}</th>`).join('')}
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map(([label, vals], i) => `
+              <tr class="${rowDiffs[i]?'bg-yellow-50':'bg-white'} hover:bg-blue-50">
+                <td class="border px-3 py-2 text-xs font-medium text-gray-700 sticky left-0 ${rowDiffs[i]?'bg-yellow-50':'bg-white'}">${label}${rowDiffs[i]?' <span class="text-yellow-600">●</span>':''}</td>
+                ${vals.map(v => `<td class="border px-3 py-2 text-sm align-top">${v}</td>`).join('')}
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-gray-500 mt-3"><span class="text-yellow-600">●</span> = 该行有差异</p>
+    </div>
+  `;
+  document.getElementById('compare-modal').classList.remove('hidden');
+}
+
+function closeCompare() { document.getElementById('compare-modal').classList.add('hidden'); }
+
+// ============ CSV 导出 ============
+function exportCSV() {
+  const cols = ['通道名','类型','Gate','建议','驱动级','HK直签','接AI','HQ','最大市场','覆盖地区','订阅','费率','市场','拒付','多商户','账期','战略窗口','接入成本','业务一综合','业务二综合','核心差异化'];
+  const keys = ['name','type','gate','rec','driver','hk','ai','hq','max_market','coverage','sub','rate','market','cb','multi','settle','window','cost','biz1','biz2','diff'];
+  const esc = v => `"${(v??'').toString().replace(/"/g,'""').replace(/\n/g,' ')}"`;
+  const csv = [cols.join(',')].concat(filtered.map(d => keys.map(k => esc(d[k])).join(','))).join('\n');
+  const blob = new Blob(['﻿' + csv], {type: 'text/csv;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `通道雷达_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+init();
+</script>
+
+</body>
+</html>
