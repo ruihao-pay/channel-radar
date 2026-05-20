@@ -1,5 +1,5 @@
 // 通道雷达数据 - 最后更新 2026-05-20 v3
-// 共 115 条 (104 + Antom子方式东南亚11，分批入库中→目标136)
+// 共 118 条 (104 + Antom子方式东南亚11+东亚3，分批入库中→目标136)
 // schema: 新增 region(地区) + role(角色) 两个维度，替代原单一 type
 // role 新增"支付辅助服务"类目(跨拒通拒付管理 / 反欺诈 / 风控类)
 window.CHANNELS_DATA = [
@@ -161,7 +161,11 @@ window.CHANNELS_DATA = [
   {name:"泰国6家网银 (Antom·泰)",region:"泰国",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"泰国",max_market:"泰国",coverage:"TH",sub:5,rate:5.5,market:6.5,cb:8,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"3.75%网银直连。一签覆盖泰6行,直连必要性低",biz1:6.00,biz2:6.12,ai:"❌随Antom"},
   {name:"Kredivo (Antom·印尼)",region:"印尼",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"印尼",max_market:"印尼",coverage:"ID",sub:4,rate:7,market:6.5,cb:7,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"2.5% BNPL。印尼先买后付,直连必要性低",biz1:5.88,biz2:6.00,ai:"❌随Antom"},
   {name:"LINEPay (Antom·泰)",region:"泰国",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"泰国",max_market:"泰国",coverage:"TH",sub:6,rate:3.5,market:6.5,cb:8,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"D&E翻倍8%最贵+签不上,运营上引导走PromptPay替代→直连必要性中",biz1:5.80,biz2:6.08,ai:"❌随Antom"},
-  {name:"BillEase (Antom·菲)",region:"菲律宾",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"菲律宾",max_market:"菲律宾",coverage:"PH",sub:4,rate:6.5,market:6,cb:7,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"2.9% BNPL。菲先买后付,直连必要性低",biz1:5.67,biz2:5.83,ai:"❌随Antom"}
+  {name:"BillEase (Antom·菲)",region:"菲律宾",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"菲律宾",max_market:"菲律宾",coverage:"PH",sub:4,rate:6.5,market:6,cb:7,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"2.9% BNPL。菲先买后付,直连必要性低",biz1:5.67,biz2:5.83,ai:"❌随Antom"},
+  // 东亚(3)
+  {name:"Alipay HK (Antom·港)",region:"香港",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"香港",max_market:"香港",coverage:"HK",sub:6,rate:7.5,market:5.5,cb:8.5,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"2.2%。蚂蚁系HK钱包,费率低直连无收益→留Antom",biz1:6.75,biz2:6.52,ai:"❌随Antom"},
+  {name:"Alipay CN (Antom·华)",region:"中国",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"中国",max_market:"中国",coverage:"CN",sub:6,rate:7.5,market:5,cb:8.5,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"2.0%。蚂蚁系本家,直连必要性低",biz1:6.67,biz2:6.42,ai:"❌随Antom"},
+  {name:"JkoPay (Antom·台)",region:"台湾",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"台湾",max_market:"台湾",coverage:"TW",sub:5.5,rate:4,market:7,cb:8,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"D&E翻倍7%/其他2.5%。台湾国民钱包但D&E贵+签不上→直连必要性中",biz1:5.85,biz2:6.12,ai:"❌随Antom"}
 ];
 
 // 业务定义（可扩展）
@@ -187,6 +191,6 @@ window.BIZ_LABELS = {
 // 元数据
 window.META = {
   lastUpdated: "2026-05-20",
-  totalCount: 115,
+  totalCount: 118,
   feishuUrl: "https://gcn9eq0plpq9.feishu.cn/base/QLySbEoyVae0pZsDjqucUGHKnGe?table=tblxC8TQmax7De1s&view=vewCBixMon"
 };
