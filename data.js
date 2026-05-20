@@ -1,5 +1,5 @@
 // 通道雷达数据 - 最后更新 2026-05-20 v3
-// 共 128 条 (104 + Antom子方式东南亚11+东亚3+韩国3+欧洲7，分批入库中→目标136)
+// 共 134 条 (104 + Antom子方式东南亚11+东亚3+韩国3+欧洲7+拉美6，分批入库中→目标136)
 // schema: 新增 region(地区) + role(角色) 两个维度，替代原单一 type
 // role 新增"支付辅助服务"类目(跨拒通拒付管理 / 反欺诈 / 风控类)
 window.CHANNELS_DATA = [
@@ -177,7 +177,14 @@ window.CHANNELS_DATA = [
   {name:"Przelewy24 (Antom·波)",region:"波兰",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"波兰",max_market:"波兰",coverage:"PL",sub:4.5,rate:8,market:6,cb:8,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"A2A 1.9%。波兰转账聚合,直连必要性低",biz1:6.40,biz2:6.28,ai:"❌随Antom"},
   {name:"EPS (Antom·奥)",region:"奥地利",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"奥地利",max_market:"奥地利",coverage:"AT",sub:4,rate:8.5,market:4.5,cb:8.5,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"A2A 1.5%。奥地利网银,直连必要性低",biz1:6.25,biz2:5.97,ai:"❌随Antom"},
   {name:"iDEAL (Antom·荷)",region:"荷兰",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"荷兰",max_market:"荷兰",coverage:"NL",sub:4,rate:7,market:6,cb:8.5,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"EUR0.20固定/笔。荷兰国民A2A,直连必要性低",biz1:6.10,biz2:6.05,ai:"❌随Antom"},
-  {name:"Bancontact (Antom·比)",region:"比利时",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"比利时",max_market:"比利时",coverage:"BE",sub:4,rate:7,market:5,cb:8.5,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"EUR0.25固定/笔。比利时国民卡,直连必要性低",biz1:5.95,biz2:5.85,ai:"❌随Antom"}
+  {name:"Bancontact (Antom·比)",region:"比利时",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"比利时",max_market:"比利时",coverage:"BE",sub:4,rate:7,market:5,cb:8.5,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"EUR0.25固定/笔。比利时国民卡,直连必要性低",biz1:5.95,biz2:5.85,ai:"❌随Antom"},
+  // 拉美(6)
+  {name:"PIX (Antom·巴西)",region:"巴西",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🔵 可评直连",driver:"L3 战略窗口",hq:"巴西",max_market:"巴西",coverage:"BR",sub:4,rate:9.5,market:8,cb:8.5,multi:7,settle:5.5,window:1,cost:"中 1.5",diff:"央行即时0.9%超低。金矿市场+已有 PagBrasil 候选→直连必要性中,值得单独评估",biz1:7.03,biz2:6.83,ai:"❌随Antom"},
+  {name:"Mercado Pago (Antom·巴西)",region:"巴西",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"阿根廷",max_market:"巴西",coverage:"BR",sub:6,rate:5,market:6.5,cb:7,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"3.8%。拉美本地大钱包,与独立 Mercado Pago 区分,直连必要性中",biz1:5.97,biz2:6.20,ai:"❌随Antom"},
+  {name:"Mercado Pago (Antom·智利)",region:"智利",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"阿根廷",max_market:"智利",coverage:"CL",sub:6,rate:5.5,market:5.5,cb:7,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"3.5%。智利站点,直连必要性中低",biz1:5.95,biz2:6.08,ai:"❌随Antom"},
+  {name:"Mercado Pago (Antom·墨西哥)",region:"墨西哥",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"阿根廷",max_market:"墨西哥",coverage:"MX",sub:6,rate:5,market:6,cb:7,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"3.6%。墨西哥站点,直连必要性中低",biz1:5.90,biz2:6.10,ai:"❌随Antom"},
+  {name:"Pagaleve (Antom·巴西)",region:"巴西",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"巴西",max_market:"巴西",coverage:"BR",sub:4,rate:6,market:5.5,cb:7,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"3.2% BNPL。巴西先买后付,直连必要性低",biz1:5.48,biz2:5.65,ai:"❌随Antom"},
+  {name:"Mercado Pago (Antom·秘鲁)",region:"秘鲁",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"阿根廷",max_market:"秘鲁",coverage:"PE",sub:6,rate:4,market:4.5,cb:7,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"4.8%偏贵。秘鲁站点,直连必要性中",biz1:5.42,biz2:5.65,ai:"❌随Antom"}
 ];
 
 // 业务定义（可扩展）
@@ -203,6 +210,6 @@ window.BIZ_LABELS = {
 // 元数据
 window.META = {
   lastUpdated: "2026-05-20",
-  totalCount: 128,
+  totalCount: 134,
   feishuUrl: "https://gcn9eq0plpq9.feishu.cn/base/QLySbEoyVae0pZsDjqucUGHKnGe?table=tblxC8TQmax7De1s&view=vewCBixMon"
 };
