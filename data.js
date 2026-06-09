@@ -1,4 +1,4 @@
-// 通道雷达数据 - 最后更新 2026-05-20 v3
+// 通道雷达数据 - 最后更新 2026-06-09 v4
 // 共 136 条 (104 + Antom子方式32:东南亚11+东亚3+韩国3+欧洲7+拉美6+全球卡2，入库完成)
 // schema: 新增 region(地区) + role(角色) 两个维度，替代原单一 type
 // role 新增"支付辅助服务"类目(跨拒通拒付管理 / 反欺诈 / 风控类)
@@ -191,17 +191,67 @@ window.CHANNELS_DATA = [
 ];
 
 // 业务定义（可扩展）
+// matchScore 用于在线页按锐浩当前客户场景排序,不改动原始通道评分。
 window.BUSINESSES = [
-  {id:"xianxian", name:"闲闲", short:"闲闲(AI陪聊)", category:"业务二·转售订阅",
-   gates:["接 AI 陪聊", "HK 直签", "Gate PASS", "订阅功能 ≥ 5"],
+  {id:"xianxian", name:"闲闲美区高风险信用卡", short:"闲闲(AI陪聊)", category:"业务二·转售订阅",
+   priority:"美区成人/AI 陪聊卡收单,当前主链路是领航,备份要优先找可接高风险 MoR。",
+   nextStep:"优先看 T1/T2:领航维持主线,CCBill/Segpay/Epoch 做 alive 备份。",
+   gates:["接 AI 陪聊", "美区/全球覆盖", "Gate PASS", "订阅或拒付能力 ≥ 7"],
    check: (c) => ({
      g1: c.ai === '✅可接',
-     g2: c.hk === '✅',
+     g2: /美区|全球|欧洲/.test(c.region + c.max_market + c.coverage),
      g3: c.gate.startsWith('✅'),
-     g4: (c.sub||0) >= 5
-   })}
-  // 后续加业务：
-  // {id:"xxx", name:"...", short:"...", category:"业务一·自营订阅" 或 "业务二·转售订阅", gates:[...], check: ...}
+     g4: Math.max(c.sub||0, c.cb||0) >= 7
+   }),
+   matchScore: (c) => (c.biz2||0) + (c.ai==='✅可接'?2.2:0) + (/美区|成人|AI 陪聊/.test(c.region + c.max_market + c.diff)?1.4:0) + ((c.rec||'').includes('🏆')?1.2:0) + ((c.role||'').includes('MoR')?0.8:0) + ((c.hk||'')==='✅'?0.3:0)},
+
+  {id:"sparklab", name:"SparkLab 日韩港澳台正规 AI 视频", short:"SparkLab", category:"业务一·正规化订阅",
+   priority:"客户要日韩港澳台和全球卡,先按正规 AI 工具口径找可过审、覆盖强、钱包/卡聚合能力强的通道。",
+   nextStep:"Antom 是主推底座;若保证金/内容测试卡住,看 Stripe/Checkout/Oceanpayment 等正规盘备选。",
+   gates:["正规盘可接", "日韩港澳台/全球覆盖", "HK 直签", "市场或多支付 ≥ 7"],
+   check: (c) => ({
+     g1: c.ai !== '✅可接',
+     g2: /全球|韩国|日本|香港|台湾|东亚|东南亚/.test(c.region + c.max_market + c.coverage + c.diff),
+     g3: c.hk === '✅',
+     g4: Math.max(c.market||0, c.multi||0) >= 7
+   }),
+   matchScore: (c) => (c.biz1||0) + ((c.hk||'')==='✅'?1.2:0) + (/全球|日韩|韩国|日本|香港|台湾|东南亚/.test(c.region + c.max_market + c.coverage + c.diff)?1.4:0) + ((c.role||'').includes('全球聚合商')?0.8:0) - (c.ai==='✅可接'?0.6:0)},
+
+  {id:"huohua", name:"火花投资稳定币收款/发薪", short:"火花(稳定币)", category:"业务一·稳定币收款",
+   priority:"土耳其棋牌先解决稳定币收款和小额发薪,核心看加密 PSP、低费率、结算快、拒付不可逆。",
+   nextStep:"StablePay 继续作为代理主线;NOWPayments/CoinPayments 做报价和能力备份。",
+   gates:["加密/稳定币通道", "Gate PASS", "HK 直签", "费率或账期 ≥ 7"],
+   check: (c) => ({
+     g1: c.role === '加密 PSP' || c.region === '加密链' || /稳定币|USDT|crypto|加密/i.test(c.diff||''),
+     g2: c.gate.startsWith('✅'),
+     g3: c.hk === '✅',
+     g4: Math.max(c.rate||0, c.settle||0) >= 7
+   }),
+   matchScore: (c) => (c.biz1||0) + ((c.role==='加密 PSP'||c.region==='加密链')?2.6:0) + (/StablePay|稳定币|USDT/i.test(c.name + c.diff)?1.6:0) + ((c.rate||0)+(c.settle||0))/10},
+
+  {id:"lizong_vn", name:"李总越南支付启动", short:"李总越南", category:"业务一·越南本地支付",
+   priority:"李总场景是越南支付启动,要先压本地转化率和费率,不追求全球覆盖。",
+   nextStep:"Appota 是当前 P0;同步看 MoMo/ZaloPay 作为 Appota 覆盖能力校验,但不建议单独直连钱包。",
+   gates:["越南覆盖", "Gate 可推进", "费率 ≥ 7", "本地 PSP/钱包"],
+   check: (c) => ({
+     g1: /越南|VN/.test(c.region + c.max_market + c.coverage + c.diff),
+     g2: !c.gate.startsWith('❌'),
+     g3: (c.rate||0) >= 7,
+     g4: /本地 PSP|钱包|Antom子方式/.test(c.role||'')
+   }),
+   matchScore: (c) => (c.biz1||0) + (/越南|VN/.test(c.region + c.max_market + c.coverage + c.diff)?2.4:0) + ((c.rate||0)/4) + ((c.name||'').includes('Appota')?2:0)},
+
+  {id:"us_direct", name:"半年内美区直连备份", short:"美区直连", category:"战略·领航备份",
+   priority:"目标是降低对领航单点依赖,找可谈直连/代理/ISO 的美区卡通道或高风险 MoR。",
+   nextStep:"优先约 CCBill/Segpay/Epoch/Rocketgate,同时记录 HK 直签、reserve、拒付阈值、主体寿命。",
+   gates:["美区或全球卡", "可接高风险", "拒付能力 ≥ 7", "非 Gate FAIL"],
+   check: (c) => ({
+     g1: /美区|全球卡|US|美国/.test(c.region + c.max_market + c.coverage + c.diff),
+     g2: c.ai === '✅可接' || /高风险|成人|AI 陪聊/.test(c.max_market + c.diff),
+     g3: (c.cb||0) >= 7,
+     g4: !c.gate.startsWith('❌')
+   }),
+   matchScore: (c) => (c.biz2||0) + (/美区|US|美国|全球卡/.test(c.region + c.max_market + c.coverage + c.diff)?1.8:0) + (c.ai==='✅可接'?1.4:0) + ((c.cb||0)/4) + ((c.rec||'').includes('🏆')?1:0)}
 ];
 
 // 业务一/业务二 简称（用于综合分显示）
@@ -212,7 +262,7 @@ window.BIZ_LABELS = {
 
 // 元数据
 window.META = {
-  lastUpdated: "2026-05-20",
+  lastUpdated: "2026-06-09",
   totalCount: 136,
   feishuUrl: "https://gcn9eq0plpq9.feishu.cn/base/QLySbEoyVae0pZsDjqucUGHKnGe?table=tblxC8TQmax7De1s&view=vewCBixMon"
 };

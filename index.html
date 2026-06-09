@@ -13,12 +13,12 @@
   .gate-pending { background: #dbeafe; color: #1e40af; }
   .card { transition: all 0.2s; min-height: 290px; display: flex; flex-direction: column; }
   .card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-  .priority-card { background: linear-gradient(135deg, #faf5ff 0%, #fdf2f8 100%); border: 2px solid #c084fc !important; position: relative; }
-  .priority-card::before { content: '🏆 强推'; position: absolute; top: -12px; left: 14px; background: linear-gradient(to right, #8b5cf6, #ec4899); color: white; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 9999px; letter-spacing: 0.3px; box-shadow: 0 2px 8px rgba(139,92,246,0.4); }
+  .priority-card { background: #f0fdf4; border: 2px solid #34d399 !important; position: relative; }
+  .priority-card::before { content: '强推'; position: absolute; top: -12px; left: 14px; background: #047857; color: white; font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 9999px; letter-spacing: 0.3px; box-shadow: 0 2px 8px rgba(4,120,87,0.25); }
   .badge { display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 500; white-space: nowrap; }
   .diff-text { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.5em; }
   .compare-checkbox { width: 18px; height: 18px; cursor: pointer; accent-color: #8b5cf6; }
-  .compare-fab { position: fixed; bottom: 24px; right: 24px; background: linear-gradient(to right, #8b5cf6, #ec4899); color: white; padding: 12px 24px; border-radius: 9999px; box-shadow: 0 8px 24px rgba(139,92,246,0.4); cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; z-index: 30; transition: transform 0.2s; }
+  .compare-fab { position: fixed; bottom: 24px; right: 24px; background: #111827; color: white; padding: 12px 24px; border-radius: 9999px; box-shadow: 0 8px 24px rgba(17,24,39,0.25); cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 600; z-index: 30; transition: transform 0.2s; }
   .compare-fab:hover { transform: scale(1.05); }
   .selected-card { box-shadow: 0 0 0 3px #c084fc !important; }
   /* KPI 卡 */
@@ -27,7 +27,10 @@
   .kpi-active { ring: 2px; box-shadow: 0 0 0 3px rgba(99,102,241,0.5); }
   /* 业务切换器 */
   .biz-pill { padding: 6px 14px; border-radius: 9999px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; border: 1px solid #e5e7eb; background: white; }
-  .biz-pill.active { background: linear-gradient(to right, #8b5cf6, #ec4899); color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(139,92,246,0.3); }
+  .biz-pill.active { background: #111827; color: white; border-color: transparent; box-shadow: 0 4px 12px rgba(17,24,39,0.18); }
+  .decision-card { border-left: 4px solid #0f766e; }
+  .decision-rank { width: 34px; height: 34px; border-radius: 9999px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; background: #ccfbf1; color: #0f766e; flex: 0 0 auto; }
+  .action-pill { display: inline-flex; align-items: center; padding: 3px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: #f3f4f6; color: #374151; }
   @media (max-width: 640px) { .hide-mobile { display: none; } }
   /* 折叠分组 */
   details.tier-group > summary { list-style: none; }
@@ -39,15 +42,15 @@
 <body class="bg-gray-50 min-h-screen">
 
 <!-- Header -->
-<header class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white shadow-lg sticky top-0 z-40">
+<header class="bg-white text-gray-900 shadow-sm border-b sticky top-0 z-40">
   <div class="max-w-7xl mx-auto px-4 py-4">
     <div class="flex items-center justify-between flex-wrap gap-2">
       <div>
-        <h1 class="text-2xl font-bold flex items-center gap-2">🛰️ 通道雷达</h1>
-        <p class="text-xs opacity-90 mt-1" id="meta-info">加载中...</p>
+        <h1 class="text-2xl font-bold flex items-center gap-2">通道雷达</h1>
+        <p class="text-xs text-gray-500 mt-1" id="meta-info">加载中...</p>
       </div>
       <div class="flex gap-2 text-sm">
-        <a id="feishu-link" href="#" target="_blank" class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-md transition">📋 飞书 Bitable</a>
+        <a id="feishu-link" href="#" target="_blank" class="bg-gray-900 text-white hover:bg-gray-700 px-3 py-1.5 rounded-md transition">飞书 Bitable</a>
       </div>
     </div>
   </div>
@@ -57,10 +60,11 @@
 <div class="bg-white border-b sticky top-[72px] z-30 shadow-sm">
   <div class="max-w-7xl mx-auto px-4">
     <div class="flex gap-1 overflow-x-auto">
-      <button data-tab="overview" class="tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-indigo-600 text-indigo-600 whitespace-nowrap">📊 总览</button>
-      <button data-tab="business" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-indigo-600 whitespace-nowrap">🎯 业务专题</button>
-      <button data-tab="matrix" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-indigo-600 whitespace-nowrap">🗂️ 角色 × Gate</button>
-      <button data-tab="stats" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-indigo-600 whitespace-nowrap">📈 统计</button>
+      <button data-tab="decision" class="tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-gray-900 text-gray-900 whitespace-nowrap">决策台</button>
+      <button data-tab="business" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 whitespace-nowrap">业务专题</button>
+      <button data-tab="overview" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 whitespace-nowrap">全部通道</button>
+      <button data-tab="matrix" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 whitespace-nowrap">角色 × Gate</button>
+      <button data-tab="stats" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 whitespace-nowrap">统计</button>
     </div>
   </div>
 </div>
@@ -75,7 +79,7 @@
 
 <!-- Filters -->
 <div id="filters" class="bg-white border-b shadow-sm">
-  <div class="max-w-7xl mx-auto px-4 py-3 grid grid-cols-2 md:grid-cols-8 gap-2">
+  <div class="max-w-7xl mx-auto px-4 py-3 grid grid-cols-2 md:grid-cols-10 gap-2">
     <input type="text" id="search" placeholder="🔍 搜索通道名/HQ/市场/差异化..." class="col-span-2 md:col-span-2 px-3 py-2 border rounded-md text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none">
     <select id="filter-region" class="px-3 py-2 border rounded-md text-sm bg-white">
       <option value="">所有地区</option>
@@ -96,11 +100,26 @@
       <option value="⏳待问">⏳ 待问</option>
       <option value="未知">未知</option>
     </select>
+    <select id="filter-hk" class="px-3 py-2 border rounded-md text-sm bg-white">
+      <option value="">所有签约</option>
+      <option value="✅">HK ✅</option>
+      <option value="⚠️">HK ⚠️</option>
+      <option value="❌">HK ❌</option>
+    </select>
     <select id="filter-risk" class="px-3 py-2 border rounded-md text-sm bg-white">
       <option value="">所有风险</option>
       <option value="🔴 可接高风险">🔴 可接高风险/擦边</option>
       <option value="🟢 仅正规">🟢 仅正规</option>
       <option value="⚪ 待定">⚪ 待定</option>
+    </select>
+    <select id="sort-by" class="px-3 py-2 border rounded-md text-sm bg-white">
+      <option value="priority">默认优先级</option>
+      <option value="biz2">业务二分数</option>
+      <option value="biz1">业务一分数</option>
+      <option value="rate">费率评分</option>
+      <option value="settle">账期评分</option>
+      <option value="cb">拒付评分</option>
+      <option value="sub">订阅评分</option>
     </select>
   </div>
   <div class="max-w-7xl mx-auto px-4 pb-3 flex items-center justify-between gap-2 flex-wrap">
@@ -148,7 +167,9 @@ const data = window.CHANNELS_DATA || [];
 const META = window.META || {};
 const BUSINESSES = window.BUSINESSES || [];
 const BIZ_LABELS = window.BIZ_LABELS || {biz1:"业务一", biz2:"业务二"};
-let currentTab = 'overview';
+const FILTER_IDS = ['search','filter-region','filter-role','filter-gate','filter-rec','filter-ai','filter-hk','filter-risk','sort-by'];
+const RESET_IDS = ['filter-region','filter-role','filter-gate','filter-rec','filter-ai','filter-hk','filter-risk','sort-by'];
+let currentTab = 'decision';
 let currentView = 'cards';
 let currentBiz = (BUSINESSES[0] && BUSINESSES[0].id) || 'xianxian';
 let filtered = [...data];
@@ -194,13 +215,13 @@ function fillSelect(id, items) {
 }
 
 function bindEvents() {
-  ['search','filter-region','filter-role','filter-gate','filter-rec','filter-ai','filter-risk'].forEach(id => {
+  FILTER_IDS.forEach(id => {
     document.getElementById(id).addEventListener('input', onFilterChange);
     document.getElementById(id).addEventListener('change', onFilterChange);
   });
   document.getElementById('reset-filter').addEventListener('click', () => {
     document.getElementById('search').value = '';
-    ['filter-region','filter-role','filter-gate','filter-rec','filter-ai','filter-risk'].forEach(id => document.getElementById(id).value = '');
+    RESET_IDS.forEach(id => document.getElementById(id).value = '');
     onFilterChange();
   });
   document.getElementById('share-link').addEventListener('click', shareLink);
@@ -226,13 +247,13 @@ function readURLParams() {
   if (p.get('tab')) {
     currentTab = p.get('tab');
     document.querySelectorAll('.tab-btn').forEach(b => {
-      if (b.dataset.tab === currentTab) { b.classList.add('border-indigo-600','text-indigo-600'); b.classList.remove('border-transparent','text-gray-600'); }
-      else { b.classList.remove('border-indigo-600','text-indigo-600'); b.classList.add('border-transparent','text-gray-600'); }
+      if (b.dataset.tab === currentTab) { b.classList.add('border-gray-900','text-gray-900'); b.classList.remove('border-transparent','text-gray-600'); }
+      else { b.classList.remove('border-gray-900','text-gray-900'); b.classList.add('border-transparent','text-gray-600'); }
     });
   }
   if (p.get('view')) currentView = p.get('view');
   if (p.get('biz')) currentBiz = p.get('biz');
-  ['search','filter-region','filter-role','filter-gate','filter-rec','filter-ai','filter-risk'].forEach(id => {
+  FILTER_IDS.forEach(id => {
     const v = p.get(id);
     if (v) document.getElementById(id).value = v;
   });
@@ -240,10 +261,10 @@ function readURLParams() {
 
 function updateURL() {
   const params = new URLSearchParams();
-  if (currentTab !== 'overview') params.set('tab', currentTab);
+  if (currentTab !== 'decision') params.set('tab', currentTab);
   if (currentView !== 'cards') params.set('view', currentView);
   if (currentTab === 'business' && currentBiz !== (BUSINESSES[0]&&BUSINESSES[0].id)) params.set('biz', currentBiz);
-  ['search','filter-region','filter-role','filter-gate','filter-rec','filter-ai','filter-risk'].forEach(id => {
+  FILTER_IDS.forEach(id => {
     const v = document.getElementById(id).value;
     if (v) params.set(id, v);
   });
@@ -265,8 +286,8 @@ function shareLink() {
 function setTab(tab) {
   currentTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b => {
-    if (b.dataset.tab === tab) { b.classList.add('border-indigo-600','text-indigo-600'); b.classList.remove('border-transparent','text-gray-600'); }
-    else { b.classList.remove('border-indigo-600','text-indigo-600'); b.classList.add('border-transparent','text-gray-600'); }
+    if (b.dataset.tab === tab) { b.classList.add('border-gray-900','text-gray-900'); b.classList.remove('border-transparent','text-gray-600'); }
+    else { b.classList.remove('border-gray-900','text-gray-900'); b.classList.add('border-transparent','text-gray-600'); }
   });
   applyFilters();
   updateURL();
@@ -294,7 +315,7 @@ function renderDashboard() {
     {label:'接 AI 陪聊', value:aiOk,   color:'text-green-700 bg-green-50',       filter:{id:'filter-ai',value:'✅可接'}},
     {label:'🏆 强推',    value:strong, color:'text-purple-700 bg-purple-50',     filter:{id:'filter-rec',value:'🏆 强推'}},
     {label:'🟢 已锁',    value:locked, color:'text-emerald-700 bg-emerald-50',   filter:{id:'filter-rec',value:'🟢 已锁接入'}},
-    {label:'HK ✅ 直签', value:hkOk,   color:'text-blue-700 bg-blue-50',         filter:null,onclick:'hkFilter'},
+    {label:'HK ✅ 直签', value:hkOk,   color:'text-blue-700 bg-blue-50',         filter:{id:'filter-hk',value:'✅'}},
     {label:'❌ 不接入',  value:noGo,   color:'text-red-700 bg-red-50',           filter:{id:'filter-rec',value:'❌ 不接入'}}
   ];
 
@@ -346,19 +367,12 @@ function recBarColor(k)  { return k.includes('🏆')?'bg-purple-500':k.includes(
 
 function onKpiClick(i) {
   const k = window._KPI[i];
-  if (k.onclick === 'hkFilter') {
-    // HK ✅ 不在 filter 下拉里,用搜索
-    document.getElementById('search').value = '';
-    // 选不到 HK,改成在所有 filter 里搜 hk='✅' — 简化为提示用户
-    alert('HK ✅ 直签筛选请用建议或地区组合');
-    return;
-  }
   if (k.filter) {
     setFilter(k.filter.id, k.filter.value);
   } else {
     // 总数:重置全部
     document.getElementById('search').value = '';
-    ['filter-region','filter-role','filter-gate','filter-rec','filter-ai','filter-risk'].forEach(id => document.getElementById(id).value = '');
+    RESET_IDS.forEach(id => document.getElementById(id).value = '');
     onFilterChange();
   }
 }
@@ -378,7 +392,9 @@ function applyFilters() {
   const fg = document.getElementById('filter-gate').value;
   const fc = document.getElementById('filter-rec').value;
   const fa = document.getElementById('filter-ai').value;
+  const fhk = document.getElementById('filter-hk').value;
   const frisk = document.getElementById('filter-risk').value;
+  const sort = document.getElementById('sort-by').value;
 
   filtered = data.filter(d => {
     if (q && !(`${d.name} ${d.hq||''} ${d.max_market||''} ${d.coverage||''} ${d.diff||''} ${d.region||''} ${d.role||''}`).toLowerCase().includes(q)) return false;
@@ -387,10 +403,12 @@ function applyFilters() {
     if (fg && d.gate !== fg) return false;
     if (fc && d.rec !== fc) return false;
     if (fa && d.ai !== fa) return false;
+    if (fhk && d.hk !== fhk) return false;
     if (frisk && riskLevel(d) !== frisk) return false;
     return true;
   });
 
+  filtered = sortChannels(filtered, sort);
   document.getElementById('count-info').textContent = `共 ${filtered.length} 条`;
   render();
 }
@@ -398,6 +416,7 @@ function applyFilters() {
 // ============ Render ============
 function render() {
   const root = document.getElementById('content');
+  if (currentTab === 'decision') return renderDecision(root);
   if (currentTab === 'matrix') return renderMatrix(root);
   if (currentTab === 'stats') return renderStats(root);
   if (currentTab === 'business') return renderBusiness(root);
@@ -509,6 +528,137 @@ function sortByRec(list) {
   });
 }
 
+function priorityScore(d) {
+  const rec = d.rec || '';
+  const gate = d.gate || '';
+  return (rec.includes('🏆') ? 100 : rec.includes('🟢') ? 85 : rec.includes('P2') ? 62 : rec.includes('观察') ? 48 : rec.includes('备选') ? 42 : rec.includes('❌') ? 0 : 35)
+    + (gate.startsWith('✅') ? 18 : gate.startsWith('⚠️') ? 8 : gate.startsWith('⏳') ? 4 : -20)
+    + (d.ai === '✅可接' ? 8 : d.ai === '⏳待问' ? 3 : 0)
+    + (d.hk === '✅' ? 5 : d.hk === '⚠️' ? 2 : -3)
+    + ((d.biz1 || 0) + (d.biz2 || 0)) / 3;
+}
+
+function sortChannels(list, sort) {
+  const sorted = [...list];
+  if (!sort || sort === 'priority') return sorted.sort((a,b) => priorityScore(b) - priorityScore(a));
+  return sorted.sort((a,b) => {
+    const diff = (b[sort] || 0) - (a[sort] || 0);
+    if (diff !== 0) return diff;
+    return priorityScore(b) - priorityScore(a);
+  });
+}
+
+function businessMatchScore(biz, d) {
+  if (typeof biz.matchScore === 'function') return biz.matchScore(d);
+  const result = biz.check(d);
+  return Object.values(result).filter(Boolean).length * 2 + (d.biz2 || 0);
+}
+
+function businessCandidates(biz, source = filtered) {
+  return source.map(d => {
+    const r = biz.check(d);
+    const pass = Object.values(r).filter(v => v === true).length;
+    return {d, r, pass, score: businessMatchScore(biz, d)};
+  }).sort((a,b) => {
+    if (b.pass !== a.pass) return b.pass - a.pass;
+    return b.score - a.score;
+  });
+}
+
+function actionLabel(d) {
+  if ((d.rec || '').includes('🏆')) return '本周优先约';
+  if ((d.rec || '').includes('🟢')) return '维持主线';
+  if ((d.gate || '').startsWith('⏳') || d.ai === '⏳待问') return '补商务问题';
+  if ((d.gate || '').startsWith('❌') || (d.rec || '').includes('❌')) return '仅留档';
+  if ((d.rec || '').includes('P2') || (d.rec || '').includes('备选')) return '备份跟进';
+  return '观察';
+}
+
+function renderDecision(root) {
+  const topUrgent = filtered
+    .filter(d => !d.gate.startsWith('❌') && d.role !== 'Antom子方式')
+    .sort((a,b) => priorityScore(b) - priorityScore(a))
+    .slice(0, 6);
+  const unknownAI = filtered.filter(d => d.ai === '⏳待问' && !d.gate.startsWith('❌')).slice(0, 6);
+  const highRisk = filtered.filter(d => riskLevel(d) === '🔴 可接高风险' && !d.gate.startsWith('❌')).slice(0, 6);
+
+  const bizCards = BUSINESSES.map(biz => {
+    const list = businessCandidates(biz, filtered).filter(c => c.pass >= 2).slice(0, 3);
+    const best = list[0];
+    return `
+      <div class="decision-card bg-white border rounded-lg p-4 shadow-sm">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="text-xs text-gray-500">${biz.category || '业务场景'}</div>
+            <h3 class="font-bold text-gray-900 mt-1">${biz.short || biz.name}</h3>
+          </div>
+          <button class="text-xs px-2 py-1 rounded bg-gray-900 text-white" onclick="setTab('business');setBiz('${biz.id}')">打开</button>
+        </div>
+        <p class="text-xs text-gray-600 mt-3 leading-relaxed">${biz.priority || ''}</p>
+        <div class="mt-3 space-y-2">
+          ${list.length ? list.map((c, i) => `
+            <div class="flex items-center gap-2 text-sm cursor-pointer hover:bg-gray-50 rounded p-1 -mx-1" onclick="showDetail(${data.indexOf(c.d)})">
+              <span class="decision-rank">${i+1}</span>
+              <div class="min-w-0 flex-1">
+                <div class="font-semibold text-gray-900 truncate">${c.d.name}</div>
+                <div class="text-xs text-gray-500">${c.pass}/${biz.gates.length} Gate · 匹配 ${(c.score || 0).toFixed(1)} · ${actionLabel(c.d)}</div>
+              </div>
+            </div>
+          `).join('') : '<div class="text-sm text-gray-400">当前筛选下暂无候选</div>'}
+        </div>
+        ${best ? `<div class="text-xs text-teal-700 bg-teal-50 rounded p-2 mt-3">下一步: ${biz.nextStep || actionLabel(best.d)}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+
+  root.innerHTML = `
+    <div class="space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div class="lg:col-span-2 bg-white border rounded-lg p-5 shadow-sm">
+          <div class="flex items-center justify-between gap-3 mb-4">
+            <div>
+              <h2 class="font-bold text-gray-900">业务决策台</h2>
+              <p class="text-xs text-gray-500 mt-1">按当前筛选结果,直接给每个客户场景排候选。</p>
+            </div>
+            <span class="text-xs text-gray-500">${filtered.length} 条参与计算</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">${bizCards}</div>
+        </div>
+        <div class="space-y-4">
+          <div class="bg-white border rounded-lg p-4 shadow-sm">
+            <h3 class="font-bold text-gray-900 mb-3">本周优先动作</h3>
+            <div class="space-y-2">
+              ${topUrgent.map(d => `
+                <div class="flex items-center gap-2 text-sm cursor-pointer hover:bg-gray-50 rounded p-1 -mx-1" onclick="showDetail(${data.indexOf(d)})">
+                  <span class="action-pill">${actionLabel(d)}</span>
+                  <span class="font-medium text-gray-900 truncate">${d.name}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          <div class="bg-white border rounded-lg p-4 shadow-sm">
+            <h3 class="font-bold text-gray-900 mb-3">待问清单</h3>
+            <div class="space-y-2">
+              ${unknownAI.length ? unknownAI.map(d => `
+                <div class="text-sm cursor-pointer hover:bg-gray-50 rounded p-1 -mx-1" onclick="showDetail(${data.indexOf(d)})">
+                  <div class="font-medium text-gray-900">${d.name}</div>
+                  <div class="text-xs text-gray-500">确认类目接受度 / HK 直签 / reserve</div>
+                </div>
+              `).join('') : '<div class="text-sm text-gray-400">当前筛选下无待问项</div>'}
+            </div>
+          </div>
+          <div class="bg-white border rounded-lg p-4 shadow-sm">
+            <h3 class="font-bold text-gray-900 mb-3">高风险可接池</h3>
+            <div class="flex flex-wrap gap-2">
+              ${highRisk.length ? highRisk.map(d => `<button class="action-pill hover:bg-gray-200" onclick="showDetail(${data.indexOf(d)})">${d.name}</button>`).join('') : '<span class="text-sm text-gray-400">当前筛选下无可接高风险通道</span>'}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
 function renderCards(root) {
   if (filtered.length === 0) return root.innerHTML = '<p class="text-center text-gray-400 py-12">没有匹配的通道</p>';
 
@@ -521,7 +671,7 @@ function renderCards(root) {
   });
 
   const grid = (list) => `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">` +
-    sortByRec(list).map(d => cardHTML(d, data.indexOf(d))).join('') + `</div>`;
+    list.map(d => cardHTML(d, data.indexOf(d))).join('') + `</div>`;
 
   const group = (list, title, note, open) => !list.length ? '' : `
     <details class="tier-group mt-6" ${open?'open':''}>
@@ -554,6 +704,7 @@ function cardHTML(d, idx) {
         <span class="text-xs text-gray-500">${d.region} · ${d.role}</span>
       </div>
       <div class="flex flex-wrap gap-1 mb-2">
+        <span class="badge bg-gray-900 text-white">${actionLabel(d)}</span>
         <span class="badge ${riskClass(riskLevel(d))}">${riskLevel(d)}</span>
         <span class="badge ${gateClass(d.gate)}">${d.gate}</span>
         <span class="badge ${recClass(d.rec)}">${d.rec}</span>
@@ -571,7 +722,7 @@ function cardHTML(d, idx) {
 
 function renderTable(root) {
   if (filtered.length === 0) return root.innerHTML = '<p class="text-center text-gray-400 py-12">没有匹配的通道</p>';
-  const sorted = [...filtered].sort((a,b) => (b.biz1||0)-(a.biz1||0));
+  const sorted = [...filtered];
   root.innerHTML = `
     <div class="bg-white rounded-lg shadow-sm border overflow-x-auto">
       <table class="w-full text-sm">
@@ -583,6 +734,7 @@ function renderTable(root) {
             <th class="px-3 py-2 text-left">角色</th>
             <th class="px-3 py-2 text-left">Gate</th>
             <th class="px-3 py-2 text-left">建议</th>
+            <th class="px-3 py-2 text-left">动作</th>
             <th class="px-3 py-2 text-center">AI</th>
             <th class="px-3 py-2 text-center hide-mobile">HK</th>
             <th class="px-3 py-2 text-right">${BIZ_LABELS.biz1}</th>
@@ -602,6 +754,7 @@ function renderTable(root) {
               <td class="px-3 py-2 text-gray-600 text-xs">${d.role}</td>
               <td class="px-3 py-2"><span class="badge ${gateClass(d.gate)}">${d.gate}</span></td>
               <td class="px-3 py-2"><span class="badge ${recClass(d.rec)}">${d.rec}</span></td>
+              <td class="px-3 py-2"><span class="badge bg-gray-900 text-white">${actionLabel(d)}</span></td>
               <td class="px-3 py-2 text-center"><span class="badge ${aiClass(d.ai)}">${d.ai}</span></td>
               <td class="px-3 py-2 text-center hide-mobile">${d.hk}</td>
               <td class="px-3 py-2 text-right font-mono text-xs">${(d.biz1||0).toFixed(2)}</td>
@@ -632,12 +785,8 @@ function renderBusiness(root) {
   }
   const biz = BUSINESSES.find(b => b.id === currentBiz) || BUSINESSES[0];
 
-  // 按业务的 check 函数计算各通道在 4 道 Gate 上的得分
-  const candidates = filtered.map(d => {
-    const r = biz.check(d);
-    const pass = Object.values(r).filter(v => v===true).length;
-    return {d, r, pass};
-  });
+  // 按业务的 check + matchScore 计算候选适配度
+  const candidates = businessCandidates(biz, filtered);
   const t1 = candidates.filter(c => c.pass === 4).map(c => c.d);          // 全适配
   const t2 = candidates.filter(c => c.pass === 3).map(c => c.d);          // 3/4
   const t3 = candidates.filter(c => c.pass === 2).map(c => c.d);          // 2/4
@@ -661,19 +810,21 @@ function renderBusiness(root) {
     <div class="space-y-6">
       ${switcher}
 
-      <div class="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg p-5">
-        <h2 class="font-bold text-lg text-purple-900 mb-1">🎯 ${biz.name} 适配筛选</h2>
-        <p class="text-xs text-purple-700">${biz.category||'—'}</p>
+      <div class="bg-teal-50 border border-teal-200 rounded-lg p-5">
+        <h2 class="font-bold text-lg text-teal-950 mb-1">${biz.name} 适配筛选</h2>
+        <p class="text-xs text-teal-700">${biz.category||'—'}</p>
+        <p class="text-xs text-gray-600 mt-2">${biz.priority||''}</p>
         <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm mt-4">
           ${biz.gates.map((g, i) => `
             <div class="bg-white/60 rounded p-3 text-center">
-              <div class="text-xs text-purple-700 mb-1">Gate ${'①②③④'[i]}</div>
-              <div class="font-semibold text-purple-900 text-sm">${g}</div>
-              <div class="text-xs text-purple-500 mt-1">${gatePassCount(i)} 条通过</div>
+              <div class="text-xs text-teal-700 mb-1">Gate ${i+1}</div>
+              <div class="font-semibold text-teal-950 text-sm">${g}</div>
+              <div class="text-xs text-teal-600 mt-1">${gatePassCount(i)} 条通过</div>
             </div>
           `).join('')}
         </div>
-        <p class="text-xs text-purple-700 mt-3">候选分布: T1 全适配 <b>${t1.length}</b> · T2 三道过 <b>${t2.length}</b> · T3 两道过 <b>${t3.length}</b> · 其他 ${others}</p>
+        <p class="text-xs text-teal-700 mt-3">候选分布: T1 全适配 <b>${t1.length}</b> · T2 三道过 <b>${t2.length}</b> · T3 两道过 <b>${t3.length}</b> · 其他 ${others}</p>
+        <p class="text-xs text-teal-800 bg-white/70 rounded p-2 mt-3">下一步: ${biz.nextStep||'补齐关键商务问题后再推进。'}</p>
       </div>
 
       <div>
@@ -792,9 +943,14 @@ function showDetail(idx) {
   const d = data[idx];
   if (!d) return;
   const scoreRow = (k, v) => `<div><div class="text-xs text-gray-500">${k}</div><div class="font-mono text-lg font-semibold">${v||'—'}</div></div>`;
+  const fits = BUSINESSES.map(biz => {
+    const r = biz.check(d);
+    const pass = Object.values(r).filter(Boolean).length;
+    return {biz, pass, score: businessMatchScore(biz, d)};
+  }).sort((a,b) => b.pass - a.pass || b.score - a.score);
 
   document.getElementById('modal-content').innerHTML = `
-    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-5 rounded-t-lg">
+    <div class="bg-gray-900 text-white p-5 rounded-t-lg">
       <div class="flex items-start justify-between">
         <div>
           <h2 class="text-2xl font-bold">${d.name}</h2>
@@ -809,9 +965,24 @@ function showDetail(idx) {
         <span class="badge ${riskClass(riskLevel(d))}">${riskLevel(d)}</span>
         <span class="badge bg-white/20 text-white">HK ${d.hk}</span>
         <span class="badge bg-white/20 text-white">${d.driver}</span>
+        <span class="badge bg-emerald-500 text-white">${actionLabel(d)}</span>
       </div>
     </div>
     <div class="p-5 space-y-4">
+      <div class="bg-teal-50 border border-teal-100 rounded-lg p-3">
+        <h3 class="text-sm font-bold text-teal-950 mb-2">业务适配</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          ${fits.map(f => `
+            <div class="bg-white rounded border p-2">
+              <div class="flex items-center justify-between gap-2">
+                <span class="text-sm font-semibold text-gray-900">${f.biz.short || f.biz.name}</span>
+                <span class="font-mono text-xs text-teal-700">${f.pass}/${f.biz.gates.length}</span>
+              </div>
+              <div class="text-xs text-gray-500 mt-1">匹配 ${(f.score||0).toFixed(1)} · ${f.pass >= 3 ? '可重点看' : f.pass === 2 ? '待补资料' : '弱相关'}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
       <div>
         <h3 class="text-sm font-bold text-gray-700 mb-2">核心差异化</h3>
         <p class="text-sm text-gray-700 leading-relaxed">${d.diff||'—'}</p>
