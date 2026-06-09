@@ -4,18 +4,18 @@
 // role 新增"支付辅助服务"类目(跨拒通拒付管理 / 反欺诈 / 风控类)
 window.CHANNELS_DATA = [
   // ========== 已锁 Top5 / 主流大牌 ==========
-  {name:"Antom",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L4 业务补全",hq:"新加坡 / 杭州",max_market:"东南亚+全球",coverage:"全球",sub:7,rate:6,market:9,cb:7,multi:8,settle:6,window:0,cost:"中 1.5",diff:"全球聚合基本盘，东南亚5国订阅钱包一签覆盖。直连 AI陪聊禁入+$50K保证金(2026-05-15确认)",biz1:7.35,biz2:7.7,ai:"❌不接"},
-  {name:"Antom 非直连",region:"美区",role:"MoR",gate:"⏳ 待评",hk:"⚠️",rec:"观察",driver:"L3 战略窗口",hq:"代理商",max_market:"美区",coverage:"全球",sub:7,rate:6,market:8,cb:7,multi:6,settle:6,window:1,cost:"中 1.5",diff:"通过子商户/聚合商身份接入，可能绕开 AI陪聊禁入。等报价中",biz1:0,biz2:0,ai:"⏳待问"},
-  {name:"Stripe",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L1 客户订单",hq:"US",max_market:"全球",coverage:"全球",sub:9,rate:5,market:8,cb:8,multi:9,settle:7,window:1,cost:"中 1.5",diff:"业务二首客L1+美港台新韩金矿+订阅引擎行业最强。但 AI陪聊类目禁",biz1:7.05,biz2:7.4,ai:"❌不接"},
-  {name:"Appota",region:"越南菲律宾",role:"本地 PSP",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"🟢 已锁接入",driver:"L1 客户订单",hq:"越南",max_market:"越南",coverage:"VN",sub:6,rate:8,market:5,cb:5,multi:5,settle:6,window:1,cost:"中 1.5",diff:"越南压注+叫闲闲L1+网银费率最低1.1%",biz1:6.45,biz2:5.6,ai:"未知"},
+  {name:"Antom",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L4 业务补全",hq:"新加坡 / 杭州",max_market:"东南亚+全球",coverage:"全球",sub:7,rate:6,market:9,cb:7,multi:8,settle:6,window:0,cost:"中 1.5",diff:"全球聚合基本盘，东南亚5国订阅钱包一签覆盖。直连特殊类目受限，且有保证金要求",biz1:7.35,biz2:7.7,ai:"❌不接"},
+  {name:"Antom 非直连",region:"美区",role:"MoR",gate:"⏳ 待评",hk:"⚠️",rec:"观察",driver:"L3 战略窗口",hq:"代理商",max_market:"美区",coverage:"全球",sub:7,rate:6,market:8,cb:7,multi:6,settle:6,window:1,cost:"中 1.5",diff:"通过子商户/聚合商身份接入，可能覆盖部分直连受限场景；等报价中",biz1:0,biz2:0,ai:"⏳待问"},
+  {name:"Stripe",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L1 客户订单",hq:"US",max_market:"全球",coverage:"全球",sub:9,rate:5,market:8,cb:8,multi:9,settle:7,window:1,cost:"中 1.5",diff:"订阅引擎和全球卡能力强，但特殊类目限制严格",biz1:7.05,biz2:7.4,ai:"❌不接"},
+  {name:"Appota",region:"越南菲律宾",role:"本地 PSP",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"🟢 已锁接入",driver:"L1 客户订单",hq:"越南",max_market:"越南",coverage:"VN",sub:6,rate:8,market:5,cb:5,multi:5,settle:6,window:1,cost:"中 1.5",diff:"越南本地支付重点候选，网银费率最低约1.1%，适合越南启动场景",biz1:6.45,biz2:5.6,ai:"未知"},
   {name:"Razorpay",region:"印度",role:"本地 PSP",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L2 资方",hq:"印度",max_market:"印度",coverage:"IN",sub:8,rate:7,market:6,cb:7,multi:5,settle:7,window:1,cost:"中 1.5",diff:"印度PSP#1，55%市占，PA-CB牌照HK直签无需印度实体",biz1:7.05,biz2:6.35,ai:"未知"},
   {name:"PagBrasil",region:"拉美",role:"本地 PSP",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L2 资方",hq:"巴西",max_market:"巴西",coverage:"BR",sub:9.5,rate:6,market:5,cb:7,multi:5,settle:7,window:2,cost:"中 1.5",diff:"PagStream订阅能力9.5全候选最高+PIX 1.99%+HK直结",biz1:7.35,biz2:7.38,ai:"未知"},
 
   // ========== 全球聚合商 ==========
-  {name:"Checkout.com",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"观察",driver:"L3 战略窗口",hq:"London, UK",max_market:"UAE / 欧洲",coverage:"全球 150+ 国",sub:8,rate:6.5,market:7.5,cb:7,multi:6,settle:7,window:1,cost:"中 1.5",diff:"CBUAE收单牌照HK直签，UAE降级观察等客户订单激活。闲闲5-3邮件首问7天无回应",biz1:7.25,biz2:7.2,ai:"⏳待问"},
+  {name:"Checkout.com",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"观察",driver:"L3 战略窗口",hq:"London, UK",max_market:"UAE / 欧洲",coverage:"全球 150+ 国",sub:8,rate:6.5,market:7.5,cb:7,multi:6,settle:7,window:1,cost:"中 1.5",diff:"CBUAE收单牌照，HK直签路径清晰；UAE/欧洲场景降级观察，等明确订单激活",biz1:7.25,biz2:7.2,ai:"⏳待问"},
   {name:"Nuvei",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"观察",driver:"L5 观察",hq:"加拿大",max_market:"全球",coverage:"全球",sub:7.5,rate:6.5,market:9,cb:9,multi:8.5,settle:7,window:1,cost:"重 2.5",diff:"业务二综合最高/游戏场景首选/拒付拦截98%，接入成本重",biz1:7.73,biz2:7.95,ai:"未知"},
   {name:"Rapyd",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"备选",driver:"L3 战略窗口",hq:"London",max_market:"LatAm+非洲",coverage:"100+ 国",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:1,cost:"中 1.5",diff:"LatAm+非洲补位，业务二备选，业务一不接",biz1:6.85,biz2:7.35,ai:"未知"},
-  {name:"Adyen",region:"全球",role:"全球聚合商",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"❌ 不接入",driver:"L5 观察",hq:"荷兰",max_market:"全球",coverage:"全球",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:1,cost:"重 2.5",diff:"与Stripe联动高度重叠+订阅惰性模式有客户风险。闲闲5-6 BD拒",biz1:6.75,biz2:7.55,ai:"❌不接"},
+  {name:"Adyen",region:"全球",role:"全球聚合商",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"❌ 不接入",driver:"L5 观察",hq:"荷兰",max_market:"全球",coverage:"全球",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:1,cost:"重 2.5",diff:"与Stripe定位高度重叠，订阅画像审核保守；高风险/擦边场景不作为当前接入对象",biz1:6.75,biz2:7.55,ai:"❌不接"},
   {name:"dLocal",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"观察",driver:"L5 观察",hq:"乌拉圭",max_market:"新兴市场",coverage:"40+ 国",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:1,cost:"中 1.5",diff:"一签覆盖Antom盲区LatAm+非洲+南亚，业务二新兴市场聚合第一",biz1:7.22,biz2:7.63,ai:"未知"},
   {name:"Worldline",region:"全球",role:"全球聚合商",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"Gate失败",hq:"法国",max_market:"欧洲",coverage:"欧洲",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:0,cost:"N/A",diff:"2025/6公司崩盘，主动撤非欧业务，全Gate失败",biz1:4.2,biz2:3.85,ai:"❌不接"},
   {name:"Worldpay/FIS",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"❌ 不接入",driver:"L5 观察",hq:"US",max_market:"全球",coverage:"全球",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:0,cost:"重 2.5",diff:"GP收购整合期+3年合同锁定+订阅平庸，全面被Stripe/Adyen/Nuvei替代",biz1:6.6,biz2:6.9,ai:"❌不接"},
@@ -23,8 +23,8 @@ window.CHANNELS_DATA = [
   {name:"Unlimit / Unlimint",region:"全球",role:"全球聚合商",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"❌ 不接入",driver:"L5 观察",hq:"London + Cyprus",max_market:"高风险跨境",coverage:"90+ 地区",sub:7,rate:6,market:7.5,cb:6.5,multi:6.5,settle:6.5,window:0,cost:"重 2.5",diff:"全球高风险跨境聚合商，已迁出俄罗斯，独占价值近 0",biz1:6.68,biz2:6.75,ai:"未知"},
   {name:"Airwallex",region:"全球",role:"全球聚合商",gate:"⚠️ 部分FAIL",hk:"✅",rec:"备选",driver:"L4 业务补全",hq:"HK / 墨尔本",max_market:"中国出海+全球",coverage:"150+ 国",sub:8,rate:7,market:8,cb:7,multi:6,settle:8,window:1,cost:"中 1.5",diff:"HK 总部直签最顺路径+中国出海客户红利。云汇即此公司",biz1:7.55,biz2:7.35,ai:"未知"},
   {name:"VailPay",region:"全球",role:"全球聚合商",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"备选",driver:"L5 观察",hq:"亚洲",max_market:"中国出海+东南亚",coverage:"40+ 国",sub:6,rate:6,market:7,cb:6,multi:6,settle:6,window:1,cost:"中 1.5",diff:"中国出海支付服务商,覆盖中港韩泰马印菲越新美英欧 40+ 国,100+ 支付方式。服务跨境电商/游戏/海外直播/数字商品/旅游,2024.12 刊例。HK 直签待验证",biz1:6,biz2:5.8,ai:"⏳待问"},
-  {name:"PayerMax",region:"全球",role:"全球聚合商",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"备选",driver:"L5 观察",hq:"新加坡",max_market:"东南亚+新兴市场",coverage:"150+ 国",sub:7,rate:6,market:8.5,cb:6.5,multi:8,settle:5.5,window:1,cost:"中 1.5",diff:"新加坡 MAS 全牌照(SHAREit/茄子科技旗下),收单+收款+正式 ISV 模式适合中间商。东南亚全钱包+巴西 PIX/Boleto+MENA,150 国 600+ 支付方式,覆盖最强项。订阅/社交直播打赏强(覆盖中国 TOP30 社交 80%)。费率未公开需个案报价,T+2 周账期偏慢。AI 陪聊未明确需 BD 报备。Trustpilot 1.9 有兑现落差投诉。2026-05-20 调研",biz1:6.73,biz2:7.15,ai:"⏳待问"},
-  {name:"Oceanpayment",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"备选",driver:"L5 观察",hq:"中国香港",max_market:"跨境电商/游戏出海",coverage:"200+ 国",sub:7,rate:6,market:8,cb:6.5,multi:6,settle:5.5,window:1,cost:"中 1.5",diff:"老牌正规跨境收单 PSP(2014,香港总部,PCI DSS L1+新加坡 MPI 牌照,海闻教授顾问)。全卡组直连(Visa/MC/Amex/Discover/银联/JCB),500+支付产品,200+国家,140+货币。2024-11 上线 Mastercard 虚拟卡发卡 OP Card(USD/HKD,商户对外付款/广告/订阅用)。HK 直签顺路。⚠️风控严正规盘,有擦边商户冻结资金 1 年案例,AI 陪聊/成人大概率拒签,只适合正规游戏/订阅/电商。费率约 3-3.8%+$0.30 跨境卡,账期/reserve 未公开需问商务。2026-05-20 调研",biz1:6.65,biz2:6.65,ai:"❌不接"},
+  {name:"PayerMax",region:"全球",role:"全球聚合商",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"备选",driver:"L5 观察",hq:"新加坡",max_market:"东南亚+新兴市场",coverage:"150+ 国",sub:7,rate:6,market:8.5,cb:6.5,multi:8,settle:5.5,window:1,cost:"中 1.5",diff:"新加坡 MAS 全牌照(SHAREit/茄子科技旗下),收单+收款+正式 ISV 模式适合中间商。东南亚全钱包+巴西 PIX/Boleto+MENA,150 国 600+ 支付方式,覆盖最强项。订阅/社交直播打赏强。费率未公开需个案报价,T+2 周账期偏慢。特殊类目接受度待 BD 报备。Trustpilot 1.9 有兑现落差投诉。2026-05-20 调研",biz1:6.73,biz2:7.15,ai:"⏳待问"},
+  {name:"Oceanpayment",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"备选",driver:"L5 观察",hq:"中国香港",max_market:"跨境电商/游戏出海",coverage:"200+ 国",sub:7,rate:6,market:8,cb:6.5,multi:6,settle:5.5,window:1,cost:"中 1.5",diff:"老牌正规跨境收单 PSP(2014,香港总部,PCI DSS L1+新加坡 MPI 牌照,海闻教授顾问)。全卡组直连(Visa/MC/Amex/Discover/银联/JCB),500+支付产品,200+国家,140+货币。HK 直签顺路。风控严，特殊类目大概率拒签，更适合正规游戏/订阅/电商。费率约 3-3.8%+$0.30 跨境卡,账期/reserve 未公开需问商务。2026-05-20 调研",biz1:6.65,biz2:6.65,ai:"❌不接"},
 
   // ========== MoR ==========
   {name:"Paddle",region:"全球",role:"MoR",gate:"⚠️ 部分FAIL",hk:"✅",rec:"备选",driver:"L3 战略窗口",hq:"London",max_market:"SaaS",coverage:"全球",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:2,cost:"中 1.5",diff:"FTC 2025/6后主动清退惰性订阅画像/业务二AUP禁聚合，仅作硬门槛国最后备份",biz1:6.65,biz2:6.05,ai:"❌不接"},
@@ -101,7 +101,7 @@ window.CHANNELS_DATA = [
 
   // ========== BNPL ==========
   {name:"Klarna",region:"全球",role:"BNPL",gate:"⚠️ 部分FAIL",hk:"✅",rec:"❌ 不接入",driver:"L5 观察",hq:"瑞典",max_market:"欧美",coverage:"45 国",sub:2,rate:3,market:8,cb:7,multi:5,settle:6,window:0,cost:"中 1.5",diff:"BNPL不等于订阅，无自动化monthly扣费，费率5.99%+$0.30极高",biz1:4.8,biz2:4.9,ai:"❌不接"},
-  {name:"Afterpay / Clearpay",region:"澳洲",role:"BNPL",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"L5 观察",hq:"美国/澳洲",max_market:"美国+澳洲",coverage:"US/AU/UK/NZ/CA",sub:4.5,rate:4.5,market:6.5,cb:7.5,multi:5,settle:6.5,window:0,cost:"重 2.5",diff:"Block 旗下 BNPL 8 国，HK 不在列+三重红线封订阅/数字/成人",biz1:5.6,biz2:5.5,ai:"❌不接"},
+  {name:"Afterpay / Clearpay",region:"澳洲",role:"BNPL",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"L5 观察",hq:"美国/澳洲",max_market:"美国+澳洲",coverage:"US/AU/UK/NZ/CA",sub:4.5,rate:4.5,market:6.5,cb:7.5,multi:5,settle:6.5,window:0,cost:"重 2.5",diff:"Block 旗下 BNPL 8 国，HK 不在列，且订阅/数字内容/特殊类目限制较多",biz1:5.6,biz2:5.5,ai:"❌不接"},
   {name:"Tabby",region:"中东",role:"BNPL",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"L5 观察",hq:"沙特/迪拜",max_market:"沙特",coverage:"AE/SA",sub:5,rate:4.5,market:3,cb:7,multi:4.5,settle:6,window:0,cost:"重 2.5",diff:"MENA #1 BNPL，HK 不可签 + 与订阅类别错配",biz1:5.08,biz2:4.73,ai:"❌不接"},
   {name:"Tamara",region:"中东",role:"BNPL",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"L5 观察",hq:"沙特",max_market:"沙特",coverage:"SA/AE/KW/BH",sub:5,rate:4.5,market:4,cb:7,multi:4.5,settle:6,window:0,cost:"重 2.5",diff:"GCC #2 BNPL Sharia 4 国略胜 Tabby 但类别错配",biz1:5.23,biz2:4.93,ai:"❌不接"},
   {name:"Affirm",region:"美区",role:"BNPL",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"L5 观察",hq:"美国",max_market:"美国",coverage:"US/CA/UK",sub:4,rate:4.5,market:5,cb:7.5,multi:4.5,settle:6.5,window:0,cost:"重 2.5",diff:"US BNPL #1 但仅 US/CA/UK 三国+三重红线+非订阅 rail",biz1:5.23,biz2:4.98,ai:"❌不接"},
@@ -113,25 +113,25 @@ window.CHANNELS_DATA = [
 
   // ========== 加密 ==========
   {name:"Triple-A",region:"加密链",role:"加密 PSP",gate:"✅ PASS",hk:"✅",rec:"搁置",driver:"L5 观察",hq:"新加坡",max_market:"APAC",coverage:"全球主流国家",sub:5,rate:7.5,market:6.5,cb:9.5,multi:5,settle:8.5,window:0,cost:"轻 1.0",diff:"MAS监管加密收款，零拒付+T+1法币结算，但主流消费者不用加密支付+订阅recurring局限",biz1:7,biz2:6.8,ai:"未知"},
-  {name:"StablePay (稳定支付)",region:"加密链",role:"加密 PSP",gate:"✅ PASS",hk:"✅",rec:"P2 补位",driver:"L3 战略窗口",hq:"亚洲",max_market:"中国出海",coverage:"全球",sub:6,rate:7,market:6,cb:9,multi:5,settle:8,window:1,cost:"轻 1.0",diff:"亚洲领先稳币支付基础设施(PayFi),专为中国出海商户。2026-05-08 与 Beosin 战略合作,长期参展白鲸/扬帆出海。只做稳定币,信用卡需求介绍给互补伙伴领航。5-11 红旗误判已撤回",biz1:6.5,biz2:6,ai:"⏳待问"},
+  {name:"StablePay (稳定支付)",region:"加密链",role:"加密 PSP",gate:"✅ PASS",hk:"✅",rec:"P2 补位",driver:"L3 战略窗口",hq:"亚洲",max_market:"中国出海",coverage:"全球",sub:6,rate:7,market:6,cb:9,multi:5,settle:8,window:1,cost:"轻 1.0",diff:"稳定币支付基础设施，适合稳定币收款、支付链接和小额批量付款场景；卡收单能力需另行配置",biz1:6.5,biz2:6,ai:"⏳待问"},
   {name:"BitPay",region:"加密链",role:"加密 PSP",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"❌ 不接入",driver:"L5 观察",hq:"亚特兰大",max_market:"US",coverage:"加密200+ / 法币37国",sub:4,rate:7,market:5.5,cb:9,multi:4,settle:7.5,window:1,cost:"中 1.5",diff:"0 chargeback+1%头部费率，但订阅 auto-debit 永不可能",biz1:6.33,biz2:5.6,ai:"未知"},
   {name:"Coinbase Commerce",region:"加密链",role:"加密 PSP",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"Gate失败",hq:"旧金山",max_market:"美国",coverage:"US/SG",sub:3.5,rate:7.5,market:5,cb:9,multi:3.5,settle:7,window:0,cost:"重 2.5",diff:"2026-03-31 已关停非美/非新加坡商户，HK 不可签",biz1:6.18,biz2:5.3,ai:"❌不接"},
 
   // ========== 美区新增 - 中国系 ISO/MoR ==========
-  {name:"领航",region:"美区",role:"MoR",gate:"✅ PASS",hk:"✅",rec:"🏆 强推",driver:"L1 客户订单",hq:"中国深圳",max_market:"美区成人/AI 陪聊",coverage:"US",sub:8,rate:7,market:5,cb:8,multi:5,settle:8,window:2,cost:"中 1.5",diff:"美区成人 MoR，5-12 实地考察 GO，链路 Esquire/Humboldt→US ISO→领航，T+3，无 CB fee，主体寿命 6-12 月",biz1:7.5,biz2:6.5,ai:"✅可接"},
-  {name:"Waffo",region:"全球",role:"MoR",gate:"⚠️ 条件PASS",hk:"✅",rec:"备选",driver:"L5 观察",hq:"欧洲",max_market:"美区+全球",coverage:"全球",sub:7,rate:4,market:7,cb:6,multi:5,settle:5,window:1,cost:"中 1.5",diff:"10%+€0.30 实际成本 23%，T+10，€10K最低提现，10-15% 保证金锁120天。锐浩 2026-04-29 主动暂停",biz1:5.5,biz2:5,ai:"✅可接"},
-  {name:"AnstPay",region:"美区",role:"MoR",gate:"❌ FAIL",hk:"⚠️",rec:"❌ 不接入",driver:"Gate失败",hq:"中国",max_market:"美区",coverage:"US",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:0,cost:"N/A",diff:"2026-05-06 dead：原方案 APP 尺度太大美国 PP 跑不了；替代方案强制代结算合规复杂",biz1:0,biz2:0,ai:"✅可接"},
-  {name:"Asiabill",region:"美区",role:"MoR",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"Gate失败",hq:"中国",max_market:"美区",coverage:"US",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:0,cost:"N/A",diff:"2026-05-06 电话明确拒 AI 类目",biz1:0,biz2:0,ai:"❌不接"},
+  {name:"美区高风险卡通道 A",region:"美区",role:"MoR",gate:"✅ PASS",hk:"✅",rec:"🏆 强推",driver:"L1 客户订单",hq:"中国",max_market:"美区高风险订阅",coverage:"US",sub:8,rate:7,market:5,cb:8,multi:5,settle:8,window:2,cost:"中 1.5",diff:"美区高风险订阅 MoR，已完成基础尽调；T+3 结算，拒付成本结构较友好，需持续监控主体稳定性",biz1:7.5,biz2:6.5,ai:"✅可接"},
+  {name:"Waffo",region:"全球",role:"MoR",gate:"⚠️ 条件PASS",hk:"✅",rec:"备选",driver:"L5 观察",hq:"欧洲",max_market:"美区+全球",coverage:"全球",sub:7,rate:4,market:7,cb:6,multi:5,settle:5,window:1,cost:"中 1.5",diff:"10%+€0.30 实际成本偏高，T+10，€10K最低提现，10-15% 保证金锁120天；当前暂停推进",biz1:5.5,biz2:5,ai:"✅可接"},
+  {name:"AnstPay",region:"美区",role:"MoR",gate:"❌ FAIL",hk:"⚠️",rec:"❌ 不接入",driver:"Gate失败",hq:"中国",max_market:"美区",coverage:"US",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:0,cost:"N/A",diff:"原方案类目适配度不足；替代方案涉及代结算，合规复杂，当前不接入",biz1:0,biz2:0,ai:"✅可接"},
+  {name:"Asiabill",region:"美区",role:"MoR",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"Gate失败",hq:"中国",max_market:"美区",coverage:"US",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:0,cost:"N/A",diff:"特殊类目接受度不足，当前不接入",biz1:0,biz2:0,ai:"❌不接"},
   {name:"Pyvio",region:"美区",role:"MoR",gate:"⏳ 待评",hk:"⚠️",rec:"观察",driver:"L5 观察",hq:"未知",max_market:"美区",coverage:"US",sub:6,rate:6,market:5,cb:6,multi:5,settle:6,window:1,cost:"中 1.5",diff:"P3 等回复，可信度待验证",biz1:0,biz2:0,ai:"⏳待问"},
 
   // ========== 美区新增 - 高风险专精 ==========
-  {name:"CCBill",region:"美区",role:"MoR",gate:"✅ PASS",hk:"⚠️",rec:"🏆 强推",driver:"L3 战略窗口",hq:"美国凤凰城",max_market:"美区成人订阅",coverage:"全球",sub:9,rate:5,market:8,cb:8,multi:7,settle:7,window:2,cost:"中 1.5",diff:"1998 老牌成人订阅 MoR，PSP 历史悠久，标准接入。闲闲首选备份候选。HK 直签待验证",biz1:7,biz2:6.5,ai:"✅可接"},
-  {name:"Segpay",region:"美区",role:"MoR",gate:"✅ PASS",hk:"⚠️",rec:"🏆 强推",driver:"L3 战略窗口",hq:"美国佛州",max_market:"约会/AI 陪聊",coverage:"全球",sub:9,rate:5,market:7,cb:8,multi:7,settle:7,window:2,cost:"中 1.5",diff:"2005 约会/AI/订阅类专精，5-6 因英文搁置但现在没退路必须重启。HK 直签待验证",biz1:7,biz2:6.5,ai:"✅可接"},
-  {name:"Epoch",region:"美区",role:"MoR",gate:"✅ PASS",hk:"⚠️",rec:"🏆 强推",driver:"L3 战略窗口",hq:"美国洛杉矶",max_market:"成人订阅",coverage:"全球",sub:9,rate:5,market:7,cb:8,multi:7,settle:7,window:2,cost:"中 1.5",diff:"1996 老牌成人订阅，行业元老级。5-6 因英文搁置需重启。HK 直签待验证",biz1:7,biz2:6.5,ai:"✅可接"},
+  {name:"CCBill",region:"美区",role:"MoR",gate:"✅ PASS",hk:"⚠️",rec:"🏆 强推",driver:"L3 战略窗口",hq:"美国凤凰城",max_market:"美区高风险订阅",coverage:"全球",sub:9,rate:5,market:8,cb:8,multi:7,settle:7,window:2,cost:"中 1.5",diff:"1998 老牌高风险订阅 MoR，PSP 历史悠久，适合作为美区订阅备选；HK 直签待验证",biz1:7,biz2:6.5,ai:"✅可接"},
+  {name:"Segpay",region:"美区",role:"MoR",gate:"✅ PASS",hk:"⚠️",rec:"🏆 强推",driver:"L3 战略窗口",hq:"美国佛州",max_market:"约会/互动订阅",coverage:"全球",sub:9,rate:5,market:7,cb:8,multi:7,settle:7,window:2,cost:"中 1.5",diff:"约会/互动订阅类专精，可作为美区高风险订阅备选；HK 直签待验证",biz1:7,biz2:6.5,ai:"✅可接"},
+  {name:"Epoch",region:"美区",role:"MoR",gate:"✅ PASS",hk:"⚠️",rec:"🏆 强推",driver:"L3 战略窗口",hq:"美国洛杉矶",max_market:"高风险订阅",coverage:"全球",sub:9,rate:5,market:7,cb:8,multi:7,settle:7,window:2,cost:"中 1.5",diff:"老牌高风险订阅 MoR，适合作为美区订阅备选；HK 直签待验证",biz1:7,biz2:6.5,ai:"✅可接"},
   {name:"Vendo",region:"美区",role:"MoR",gate:"✅ PASS",hk:"⚠️",rec:"P2 补位",driver:"L3 战略窗口",hq:"美国",max_market:"约会",coverage:"全球",sub:8,rate:5,market:6,cb:7,multi:6,settle:6,window:1,cost:"中 1.5",diff:"约会垂直专精 MoR，HK 直签待验证",biz1:6.5,biz2:6,ai:"✅可接"},
-  {name:"Verotel",region:"欧洲",role:"MoR",gate:"✅ PASS",hk:"⚠️",rec:"P2 补位",driver:"L3 战略窗口",hq:"荷兰",max_market:"欧洲成人",coverage:"全球",sub:8,rate:5,market:7,cb:7,multi:6,settle:6,window:1,cost:"中 1.5",diff:"欧洲成人订阅老牌，覆盖美区，HK 直签待验证",biz1:6.5,biz2:6,ai:"✅可接"},
+  {name:"Verotel",region:"欧洲",role:"MoR",gate:"✅ PASS",hk:"⚠️",rec:"P2 补位",driver:"L3 战略窗口",hq:"荷兰",max_market:"欧洲高风险订阅",coverage:"全球",sub:8,rate:5,market:7,cb:7,multi:6,settle:6,window:1,cost:"中 1.5",diff:"欧洲高风险订阅老牌，覆盖美区，HK 直签待验证",biz1:6.5,biz2:6,ai:"✅可接"},
   {name:"Rocketgate",region:"美区",role:"全球聚合商",gate:"✅ PASS",hk:"⚠️",rec:"P2 补位",driver:"L5 观察",hq:"美国",max_market:"高风险订阅",coverage:"全球",sub:8,rate:6,market:6,cb:8,multi:6,settle:6,window:1,cost:"中 1.5",diff:"high-risk gateway/MoR，可配合 acquirer，订阅功能强",biz1:6.5,biz2:6,ai:"✅可接"},
-  {name:"NetBilling",region:"美区",role:"MoR",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"备选",driver:"L5 观察",hq:"美国",max_market:"成人 recurring",coverage:"美国+欧洲",sub:8,rate:5,market:5,cb:7,multi:5,settle:6,window:0,cost:"中 1.5",diff:"成人订阅老 MoR，需查 HK 直签",biz1:6,biz2:5.5,ai:"✅可接"},
+  {name:"NetBilling",region:"美区",role:"MoR",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"备选",driver:"L5 观察",hq:"美国",max_market:"高风险 recurring",coverage:"美国+欧洲",sub:8,rate:5,market:5,cb:7,multi:5,settle:6,window:0,cost:"中 1.5",diff:"高风险订阅老 MoR，需查 HK 直签",biz1:6,biz2:5.5,ai:"✅可接"},
 
   // ========== 美区新增 - 高风险通用 ==========
   {name:"PaymentCloud",region:"美区",role:"全球聚合商",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"备选",driver:"L5 观察",hq:"美国",max_market:"高风险",coverage:"US",sub:6,rate:6,market:5,cb:7,multi:7,settle:6,window:0,cost:"中 1.5",diff:"high-risk specialist broker，帮匹配 underlying acquirer",biz1:6,biz2:5.5,ai:"✅可接"},
@@ -147,7 +147,7 @@ window.CHANNELS_DATA = [
   {name:"2Checkout / Verifone",region:"全球",role:"MoR",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"备选",driver:"L5 观察",hq:"美国",max_market:"全球",coverage:"全球",sub:7,rate:5,market:7,cb:6,multi:6,settle:6,window:0,cost:"中 1.5",diff:"主流 MoR 中风险接受度相对高，需问类目",biz1:6,biz2:5.5,ai:"⏳待问"},
 
   // ========== 支付辅助服务 (拒付管理 / 反欺诈 / 风控) ==========
-  {name:"跨拒通",region:"全球",role:"支付辅助服务",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L1 客户订单",hq:"中国",max_market:"跨境拒付管理",coverage:"全球",sub:0,rate:0,market:0,cb:9.5,multi:0,settle:0,window:0,cost:"轻 1.0",diff:"专做信用卡拒付管理,4 项服务:反欺诈($0.05/笔)+预警(RDR 90%/Ethoca 70%拦截)+抗辩(15%→60%胜诉)+包赔(0.6-0.7%费率)。闲闲合作 5-13 落地,信息隔离可行不需 SDK,PCI-DSS+GDPR 认证。创始人裴总,2026-05-08 通话纪要",biz1:0,biz2:0,ai:"✅可接"},
+  {name:"拒付管理服务 A",region:"全球",role:"支付辅助服务",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L1 客户订单",hq:"中国",max_market:"跨境拒付管理",coverage:"全球",sub:0,rate:0,market:0,cb:9.5,multi:0,settle:0,window:0,cost:"轻 1.0",diff:"信用卡拒付管理服务，覆盖反欺诈、预警、抗辩和包赔等模块；适合与高风险卡收单组合使用",biz1:0,biz2:0,ai:"✅可接"},
 
   // ========== Antom 子方式 (聚合旗下具体支付方式·判直连必要性) ==========
   // 东南亚(11)
@@ -186,28 +186,28 @@ window.CHANNELS_DATA = [
   {name:"Pagaleve (Antom·巴西)",region:"巴西",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"巴西",max_market:"巴西",coverage:"BR",sub:4,rate:6,market:5.5,cb:7,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"3.2% BNPL。巴西先买后付,直连必要性低",biz1:5.48,biz2:5.65,ai:"❌随Antom"},
   {name:"Mercado Pago (Antom·秘鲁)",region:"秘鲁",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🟡 留Antom",driver:"L5 观察",hq:"阿根廷",max_market:"秘鲁",coverage:"PE",sub:6,rate:4,market:4.5,cb:7,multi:7,settle:5.5,window:0,cost:"中 1.5",diff:"4.8%偏贵。秘鲁站点,直连必要性中",biz1:5.42,biz2:5.65,ai:"❌随Antom"},
   // 全球卡(2)
-  {name:"Visa (Antom·全球卡)",region:"全球",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🔴 已在直连",driver:"L1 客户订单",hq:"美国",max_market:"全球",coverage:"全球",sub:7,rate:5,market:9,cb:5,multi:7,settle:5.5,window:1,cost:"中 1.5",diff:"本地3.2%/跨境3.9%贵+全球覆盖→直连必要性高,但等于美区直连卡课题(Stripe/领航/Checkout),闲闲项目已在做",biz1:6.25,biz2:6.75,ai:"❌随Antom"},
-  {name:"Mastercard (Antom·全球卡)",region:"全球",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🔴 已在直连",driver:"L1 客户订单",hq:"美国",max_market:"全球",coverage:"全球",sub:7,rate:5,market:9,cb:5,multi:7,settle:5.5,window:1,cost:"中 1.5",diff:"本地3.2%/跨境3.9%贵+全球覆盖→直连必要性高,但等于美区直连卡课题(Stripe/领航/Checkout),闲闲项目已在做",biz1:6.25,biz2:6.75,ai:"❌随Antom"}
+  {name:"Visa (Antom·全球卡)",region:"全球",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🔴 已在直连",driver:"L1 客户订单",hq:"美国",max_market:"全球",coverage:"全球",sub:7,rate:5,market:9,cb:5,multi:7,settle:5.5,window:1,cost:"中 1.5",diff:"本地3.2%/跨境3.9%偏贵，全球覆盖强；直连必要性高，归入全球卡直连课题",biz1:6.25,biz2:6.75,ai:"❌随Antom"},
+  {name:"Mastercard (Antom·全球卡)",region:"全球",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🔴 已在直连",driver:"L1 客户订单",hq:"美国",max_market:"全球",coverage:"全球",sub:7,rate:5,market:9,cb:5,multi:7,settle:5.5,window:1,cost:"中 1.5",diff:"本地3.2%/跨境3.9%偏贵，全球覆盖强；直连必要性高，归入全球卡直连课题",biz1:6.25,biz2:6.75,ai:"❌随Antom"}
 ];
 
 // 业务定义（可扩展）
-// matchScore 用于在线页按锐浩当前客户场景排序,不改动原始通道评分。
+// matchScore 用于在线页按通用业务场景排序,不改动原始通道评分。
 window.BUSINESSES = [
-  {id:"xianxian", name:"闲闲美区高风险信用卡", short:"闲闲(AI陪聊)", category:"业务二·转售订阅",
-   priority:"美区成人/AI 陪聊卡收单,当前主链路是领航,备份要优先找可接高风险 MoR。",
-   nextStep:"优先看 T1/T2:领航维持主线,CCBill/Segpay/Epoch 做 alive 备份。",
-   gates:["接 AI 陪聊", "美区/全球覆盖", "Gate PASS", "订阅或拒付能力 ≥ 7"],
+  {id:"us_high_risk", name:"美区高风险订阅卡收单", short:"美区高风险订阅", category:"业务二·转售订阅",
+   priority:"面向美区互动/高风险订阅场景，优先筛选可接该类目、拒付能力强、结算可控的 MoR/卡通道。",
+   nextStep:"优先看 T1/T2：确认类目接受度、HK 直签、reserve、拒付阈值和结算周期。",
+   gates:["可接高风险订阅", "美区/全球覆盖", "Gate PASS", "订阅或拒付能力 ≥ 7"],
    check: (c) => ({
      g1: c.ai === '✅可接',
      g2: /美区|全球|欧洲/.test(c.region + c.max_market + c.coverage),
      g3: c.gate.startsWith('✅'),
      g4: Math.max(c.sub||0, c.cb||0) >= 7
    }),
-   matchScore: (c) => (c.biz2||0) + (c.ai==='✅可接'?2.2:0) + (/美区|成人|AI 陪聊/.test(c.region + c.max_market + c.diff)?1.4:0) + ((c.rec||'').includes('🏆')?1.2:0) + ((c.role||'').includes('MoR')?0.8:0) + ((c.hk||'')==='✅'?0.3:0)},
+   matchScore: (c) => (c.biz2||0) + (c.ai==='✅可接'?2.2:0) + (/美区|高风险|互动|订阅/.test(c.region + c.max_market + c.diff)?1.4:0) + ((c.rec||'').includes('🏆')?1.2:0) + ((c.role||'').includes('MoR')?0.8:0) + ((c.hk||'')==='✅'?0.3:0)},
 
-  {id:"sparklab", name:"SparkLab 日韩港澳台正规 AI 视频", short:"SparkLab", category:"业务一·正规化订阅",
-   priority:"客户要日韩港澳台和全球卡,先按正规 AI 工具口径找可过审、覆盖强、钱包/卡聚合能力强的通道。",
-   nextStep:"Antom 是主推底座;若保证金/内容测试卡住,看 Stripe/Checkout/Oceanpayment 等正规盘备选。",
+  {id:"apac_ai_tool", name:"日韩港澳台正规 AI 工具", short:"日韩港澳台 AI 工具", category:"业务一·正规化订阅",
+   priority:"面向正规 AI 工具/数字内容场景，优先找可过审、覆盖强、钱包/卡聚合能力强的通道。",
+   nextStep:"先看全球聚合底座；若保证金、内容测试或报备卡住，再比较正规盘备选。",
    gates:["正规盘可接", "日韩港澳台/全球覆盖", "HK 直签", "市场或多支付 ≥ 7"],
    check: (c) => ({
      g1: c.ai !== '✅可接',
@@ -217,9 +217,9 @@ window.BUSINESSES = [
    }),
    matchScore: (c) => (c.biz1||0) + ((c.hk||'')==='✅'?1.2:0) + (/全球|日韩|韩国|日本|香港|台湾|东南亚/.test(c.region + c.max_market + c.coverage + c.diff)?1.4:0) + ((c.role||'').includes('全球聚合商')?0.8:0) - (c.ai==='✅可接'?0.6:0)},
 
-  {id:"huohua", name:"火花投资稳定币收款/发薪", short:"火花(稳定币)", category:"业务一·稳定币收款",
-   priority:"土耳其棋牌先解决稳定币收款和小额发薪,核心看加密 PSP、低费率、结算快、拒付不可逆。",
-   nextStep:"StablePay 继续作为代理主线;NOWPayments/CoinPayments 做报价和能力备份。",
+  {id:"stablecoin_payout", name:"稳定币收款/批量付款", short:"稳定币收付", category:"业务一·稳定币收款",
+   priority:"面向稳定币收款、支付链接和小额批量付款场景，核心看加密 PSP、低费率、结算快、拒付不可逆。",
+   nextStep:"优先确认稳定币收款、批量付款、出入金成本、结算周期和商户审核边界。",
    gates:["加密/稳定币通道", "Gate PASS", "HK 直签", "费率或账期 ≥ 7"],
    check: (c) => ({
      g1: c.role === '加密 PSP' || c.region === '加密链' || /稳定币|USDT|crypto|加密/i.test(c.diff||''),
@@ -229,9 +229,9 @@ window.BUSINESSES = [
    }),
    matchScore: (c) => (c.biz1||0) + ((c.role==='加密 PSP'||c.region==='加密链')?2.6:0) + (/StablePay|稳定币|USDT/i.test(c.name + c.diff)?1.6:0) + ((c.rate||0)+(c.settle||0))/10},
 
-  {id:"lizong_vn", name:"李总越南支付启动", short:"李总越南", category:"业务一·越南本地支付",
-   priority:"李总场景是越南支付启动,要先压本地转化率和费率,不追求全球覆盖。",
-   nextStep:"Appota 是当前 P0;同步看 MoMo/ZaloPay 作为 Appota 覆盖能力校验,但不建议单独直连钱包。",
+  {id:"vietnam_local", name:"越南本地支付启动", short:"越南本地支付", category:"业务一·越南本地支付",
+   priority:"面向越南市场启动场景，优先压本地转化率和费率，不追求全球覆盖。",
+   nextStep:"优先确认网银/钱包覆盖、费率、结算币种、HK 签约路径和本地合规边界。",
    gates:["越南覆盖", "Gate 可推进", "费率 ≥ 7", "本地 PSP/钱包"],
    check: (c) => ({
      g1: /越南|VN/.test(c.region + c.max_market + c.coverage + c.diff),
@@ -241,13 +241,13 @@ window.BUSINESSES = [
    }),
    matchScore: (c) => (c.biz1||0) + (/越南|VN/.test(c.region + c.max_market + c.coverage + c.diff)?2.4:0) + ((c.rate||0)/4) + ((c.name||'').includes('Appota')?2:0)},
 
-  {id:"us_direct", name:"半年内美区直连备份", short:"美区直连", category:"战略·领航备份",
-   priority:"目标是降低对领航单点依赖,找可谈直连/代理/ISO 的美区卡通道或高风险 MoR。",
-   nextStep:"优先约 CCBill/Segpay/Epoch/Rocketgate,同时记录 HK 直签、reserve、拒付阈值、主体寿命。",
+  {id:"us_card_backup", name:"美区卡通道备份池", short:"美区卡备份", category:"战略·通道备份",
+   priority:"目标是降低单点依赖，筛选可谈直连、代理或高风险 MoR 的美区卡通道。",
+   nextStep:"优先补齐 HK 直签、reserve、拒付阈值、结算周期和主体稳定性信息。",
    gates:["美区或全球卡", "可接高风险", "拒付能力 ≥ 7", "非 Gate FAIL"],
    check: (c) => ({
      g1: /美区|全球卡|US|美国/.test(c.region + c.max_market + c.coverage + c.diff),
-     g2: c.ai === '✅可接' || /高风险|成人|AI 陪聊/.test(c.max_market + c.diff),
+     g2: c.ai === '✅可接' || /高风险|互动|订阅/.test(c.max_market + c.diff),
      g3: (c.cb||0) >= 7,
      g4: !c.gate.startsWith('❌')
    }),

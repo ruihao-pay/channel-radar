@@ -95,7 +95,7 @@
     </select>
     <select id="filter-ai" class="px-3 py-2 border rounded-md text-sm bg-white">
       <option value="">所有 AI</option>
-      <option value="✅可接">✅ 可接 AI</option>
+      <option value="✅可接">✅ 可接特殊类目</option>
       <option value="❌不接">❌ 不接</option>
       <option value="⏳待问">⏳ 待问</option>
       <option value="未知">未知</option>
@@ -157,7 +157,7 @@
 
 <!-- Footer -->
 <footer class="text-center text-xs text-gray-500 py-6">
-  锐浩 · Arcane Brilliance Limited · 持续更新中
+  Channel Radar · 持续更新中
 </footer>
 
 <!-- cache busting:每次加载都带时间戳,避免 GitHub Pages 浏览器缓存导致看不到最新 data.js -->
@@ -312,7 +312,7 @@ function renderDashboard() {
 
   const cards = [
     {label:'通道总数',  value:total,  color:'text-indigo-700 bg-white',         filter:null},
-    {label:'接 AI 陪聊', value:aiOk,   color:'text-green-700 bg-green-50',       filter:{id:'filter-ai',value:'✅可接'}},
+    {label:'接特殊类目', value:aiOk,   color:'text-green-700 bg-green-50',       filter:{id:'filter-ai',value:'✅可接'}},
     {label:'🏆 强推',    value:strong, color:'text-purple-700 bg-purple-50',     filter:{id:'filter-rec',value:'🏆 强推'}},
     {label:'🟢 已锁',    value:locked, color:'text-emerald-700 bg-emerald-50',   filter:{id:'filter-rec',value:'🟢 已锁接入'}},
     {label:'HK ✅ 直签', value:hkOk,   color:'text-blue-700 bg-blue-50',         filter:{id:'filter-hk',value:'✅'}},
@@ -450,7 +450,7 @@ function recClass(rec) {
   return 'bg-gray-100 text-gray-700';
 }
 
-// 风险等级:手动 d.risk 优先,否则从 AI 陪聊列自动派生
+// 风险等级:手动 d.risk 优先,否则从特殊类目接受度列自动派生
 function riskLevel(d) {
   if (d.risk) return d.risk;
   if (d.ai === '✅可接') return '🔴 可接高风险';
@@ -923,7 +923,7 @@ function renderStats(root) {
         ${renderBar(byRec, recBarColor)}
       </div>
       <div class="bg-white rounded-lg shadow-sm border p-5">
-        <h3 class="font-bold text-gray-900 mb-3">按 AI 陪聊接受度</h3>
+        <h3 class="font-bold text-gray-900 mb-3">按特殊类目接受度</h3>
         ${renderBar(byAI, aiColor)}
       </div>
       <div class="bg-white rounded-lg shadow-sm border p-5">
@@ -1032,7 +1032,7 @@ function openCompare() {
     ['Gate', items.map(d => `<span class="badge ${gateClass(d.gate)}">${d.gate}</span>`)],
     ['建议', items.map(d => `<span class="badge ${recClass(d.rec)}">${d.rec}</span>`)],
     ['驱动级', items.map(d => d.driver)],
-    ['AI 陪聊', items.map(d => `<span class="badge ${aiClass(d.ai)}">${d.ai}</span>`)],
+    ['特殊类目', items.map(d => `<span class="badge ${aiClass(d.ai)}">${d.ai}</span>`)],
     ['风险等级', items.map(d => `<span class="badge ${riskClass(riskLevel(d))}">${riskLevel(d)}</span>`)],
     ['HK 直签', items.map(d => d.hk)],
     ['接入成本', items.map(d => d.cost||'—')],
