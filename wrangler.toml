@@ -1,0 +1,13 @@
+name = "tongdao-radar-auth"
+main = "src/worker.js"
+compatibility_date = "2026-06-09"
+
+[assets]
+directory = "./private-app"
+binding = "ASSETS"
+
+[vars]
+FEISHU_AUTH_BASE = "https://accounts.feishu.cn/open-apis/authen/v1/authorize"
+FEISHU_TOKEN_ENDPOINT = "https://open.feishu.cn/open-apis/authen/v2/oauth/token"
+FEISHU_USERINFO_ENDPOINT = "https://open.feishu.cn/open-apis/authen/v1/user_info"
+SESSION_TTL_SECONDS = "28800"

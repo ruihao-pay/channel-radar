@@ -1,2 +1,5 @@
 .DS_Store
 files/
+private-app/
+.dev.vars
+.wrangler/
