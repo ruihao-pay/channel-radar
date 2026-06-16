@@ -217,8 +217,8 @@ window.CONNECTED_CHANNELS = [
   {
     name: "领航",
     category: "美区信用卡 / PP 上游转接",
-    directStatus: "上游转接",
-    stage: "已签约路径,合同 v0.6 仍在最终评审;成人信用卡通道尚需持续确认可用性",
+    directStatus: "已解除暂停",
+    stage: "已解除暂停,当前可恢复推进;已签约路径,合同 v0.6 仍在最终评审;成人信用卡通道尚需持续确认可用性",
     fee: "信用卡 12%→10%→8%→7%→6%;PP 10.4%→8%→6%→4.4%;美主体资料费 $2,000/套",
     settlement: "账期待合同最终确认;延迟结算 >15 日赔偿条款仍在协商",
     fit: "美区成人/AI 陪聊/高风险卡支付,尤其是 Stripe/Antom 明确禁入的业务",
@@ -272,7 +272,7 @@ window.CONNECTED_CHANNELS = [
   {
     name: "Appota",
     category: "越南本地支付聚合",
-    directStatus: "暂停",
+    directStatus: "阶段性暂停",
     stage: "已建联并拿正式报价;2026-06-15 因无越南从业资格证被拒,直连接入暂停",
     fee: "ATM 卡 0.8% + 550 VND;Appota 钱包 0.8%;ZaloPay/ShopeePay/VNPT 1.5%;QR 0.5% 最低 2,200 VND",
     settlement: "T+1 working day;≤$10,000 结算费 0.22% + $27.5;>$10,000 免结算费",
