@@ -663,7 +663,7 @@ function renderDecision(root) {
 }
 
 function connectedStatusClass(status) {
-  if (status.includes('已签约') || status.includes('代理接入')) return 'bg-emerald-100 text-emerald-800';
+  if (status.includes('已签约') || status.includes('代理接入') || status.includes('内部合作') || status.includes('已开通')) return 'bg-emerald-100 text-emerald-800';
   if (status.includes('审评')) return 'bg-blue-100 text-blue-800';
   if (status.includes('上游')) return 'bg-amber-100 text-amber-800';
   if (status.includes('暂停')) return 'bg-red-100 text-red-700';
@@ -672,7 +672,7 @@ function connectedStatusClass(status) {
 
 function renderConnected(root) {
   const active = CONNECTED_CHANNELS.filter(c => !c.directStatus.includes('暂停'));
-  const directLike = CONNECTED_CHANNELS.filter(c => c.directStatus.includes('代理接入') || c.directStatus.includes('已签约'));
+  const directLike = CONNECTED_CHANNELS.filter(c => c.directStatus.includes('代理接入') || c.directStatus.includes('已签约') || c.directStatus.includes('内部合作') || c.directStatus.includes('已开通'));
   const paused = CONNECTED_CHANNELS.filter(c => c.directStatus.includes('暂停'));
   const review = CONNECTED_CHANNELS.filter(c => c.directStatus.includes('审评'));
 
