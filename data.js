@@ -190,6 +190,75 @@ window.CHANNELS_DATA = [
   {name:"Mastercard (Antom·全球卡)",region:"全球",role:"Antom子方式",gate:"✅ PASS",hk:"✅",rec:"🔴 已在直连",driver:"L1 客户订单",hq:"美国",max_market:"全球",coverage:"全球",sub:7,rate:5,market:9,cb:5,multi:7,settle:5.5,window:1,cost:"中 1.5",diff:"本地3.2%/跨境3.9%偏贵，全球覆盖强；直连必要性高，归入全球卡直连课题",biz1:6.25,biz2:6.75,ai:"❌随Antom"}
 ];
 
+window.CONNECTED_CHANNELS = [
+  {
+    name: "StablePay",
+    category: "稳定币收单 / 代发",
+    directStatus: "代理接入中",
+    stage: "火花投资已确认收款+发薪一起接,预计 2026-06 月底接完",
+    fee: "底价:收款/支付链接 0.85%;订阅 1.11%;代发 0.085% + 3 USDT/批次;出入金 0.3%",
+    settlement: "代理返佣月结:次月 5 日前出账单,确认后 5 日内支付;商户结算/批次规则接入中确认",
+    fit: "稳定币收款、B2C 支付链接、土耳其/泛娱乐/游戏类收款、小额批量发薪",
+    limit: "链上/币值/监管风险需客户接受;代发固定批次费要按批合并,否则小额场景成本偏高",
+    source: "StablePay费率详情 / 火花投资客户档案"
+  },
+  {
+    name: "跨拒通",
+    category: "拒付预警 / 抗辩 / 反欺诈",
+    directStatus: "已签约落地",
+    stage: "2026-05-13 合作落地;月底卡通道接入后正式申请",
+    fee: "反欺诈 $0.05/笔;RDR $12/笔;Ethoca $18/笔;抗辩胜诉金额 9%;包赔需历史数据评估",
+    settlement: "非收单通道,不承接商户资金;按服务用量结算",
+    fit: "美区信用卡、高拒付风险业务、AI 陪聊/AI 视频等需要 RDR/Ethoca 和抗辩的场景",
+    limit: "低客单价 $5-10 订阅不宜重用预警,优先抗辩+选择性退款;需要配合收单通道使用",
+    source: "跨拒通 / 跨拒通价目表"
+  },
+  {
+    name: "领航",
+    category: "美区信用卡 / PP 上游转接",
+    directStatus: "上游转接",
+    stage: "已签约路径,合同 v0.6 仍在最终评审;成人信用卡通道尚需持续确认可用性",
+    fee: "信用卡 12%→10%→8%→7%→6%;PP 10.4%→8%→6%→4.4%;美主体资料费 $2,000/套",
+    settlement: "账期待合同最终确认;延迟结算 >15 日赔偿条款仍在协商",
+    fit: "美区成人/AI 陪聊/高风险卡支付,尤其是 Stripe/Antom 明确禁入的业务",
+    limit: "不是我方直连上游,资金经领航中转;主体寿命 6-12 月;必须配跨拒通",
+    source: "渠道BD跟进/领航"
+  },
+  {
+    name: "Antom",
+    category: "全球卡 + 钱包聚合",
+    directStatus: "审评中",
+    stage: "Arcane Brilliance 香港主体已对接;SparkLab/Lunote 等正规类目评估中",
+    fee: "全球卡:本地 3.20% / 跨境 3.90% + USD 0.30;争议 USD 20;SEA 钱包约 1.0%-8.0% + USD 0.10",
+    settlement: "统一 T+5",
+    fit: "正规 AI 工具、SaaS、日韩港澳台/东南亚钱包、全球卡收单",
+    limit: "AI 陪聊/成人/短剧等禁入或高风险;美区卡需 $50K 保证金;无 RDR/Ethoca,需配跨拒通",
+    source: "Antom费率基准 / Antom美区接入要求"
+  },
+  {
+    name: "Appota",
+    category: "越南本地支付聚合",
+    directStatus: "暂停",
+    stage: "已建联并拿正式报价;2026-06-15 因无越南从业资格证被拒,直连接入暂停",
+    fee: "ATM 卡 0.8% + 550 VND;Appota 钱包 0.8%;ZaloPay/ShopeePay/VNPT 1.5%;QR 0.5% 最低 2,200 VND",
+    settlement: "T+1 working day;≤$10,000 结算费 0.22% + $27.5;>$10,000 免结算费",
+    fit: "越南本地游戏/数字内容/工具类,需要 MoMo/ZaloPay/银行/QR 的本地化收款",
+    limit: "需要越南本地从业资格/经营许可;当前不能作为对客户可落地报价,只保留成本基准",
+    source: "渠道BD跟进/Appota"
+  },
+  {
+    name: "Airwallex / 云汇",
+    category: "资金归集 / 全球账户",
+    directStatus: "辅助账户",
+    stage: "用于 USD 虚拟账户和出入金链路评估;不是高风险收单主通道",
+    fee: "收款入账固定 0.3%;SWIFT 外币出金约 $3-25/笔",
+    settlement: "虚拟账户收 USD、付 USD;不自动结汇,需自行找银行换 CNY",
+    fit: "正规业务资金归集、USD/HKD/SGD 全球账户、低风险 SaaS/工具类结算",
+    limit: "AUP 明确禁成人/擦边;不适合归集闲闲等成人/高风险资金",
+    source: "闲闲资金归集合规风险 / 当前进行中"
+  }
+];
+
 // 业务定义（可扩展）
 // matchScore 用于在线页按通用业务场景排序,不改动原始通道评分。
 window.BUSINESSES = [
