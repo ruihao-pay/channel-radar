@@ -236,6 +236,17 @@ window.CONNECTED_CHANNELS = [
     source: "Antom费率基准 / Antom美区接入要求"
   },
   {
+    name: "Waffo",
+    category: "MoR / 欧洲收单 / 卡组 + APM",
+    directStatus: "暂停",
+    stage: "已拿刊例和 Voice Friend 报价;2026-04-29 因 €0.30 单笔费和阶梯费率谈不动,锐浩主动暂停;客户新场景可重启",
+    fee: "基础报价 10% + €0.30/笔;AI 类保证金 10-15%,锁 120 天;拒付未预警 €30/笔;按闲闲 $6 ARPU 测算,0.3% 拒付下实际成本约 23.17%",
+    settlement: "T+10;€10,000 最低提现;保证金锁 120 天",
+    fit: "欧洲/全球 MoR 备选、可接受高费率的 AI 陪聊/数字内容、需要卡组 + APM 且其他通道无法接的兜底场景",
+    limit: "小客单价业务被 €0.30/笔显著拉高成本;月流水 $500K-$1M+ 前议价空间弱;当前不能作为低成本主推通道",
+    source: "Waffo quotation sheet to Voice Friend-2026-4-28-V1.pdf / Waffo成本模型"
+  },
+  {
     name: "Appota",
     category: "越南本地支付聚合",
     directStatus: "暂停",
