@@ -262,13 +262,13 @@ window.CONNECTED_CHANNELS = [
   {
     name: "AIPowerPay",
     category: "一站式跨境支付 / 全球卡 + 本地支付",
-    directStatus: "已接触暂停",
-    stage: "已收到 AIPowerPay 一站式跨境支付刊例;当前处于已接触但暂停推进,费率账期和可接类目仍需补问商务",
-    fee: "待补:已有刊例,但未形成可报价费率表",
-    settlement: "待补",
-    fit: "跨境收单、全球卡、本地支付、正规 AI 工具/SaaS、出海数字内容",
-    limit: "当前不能作为可报价渠道;需先确认 HK/新加坡主体签约路径、AI/擦边类目接受度、拒付处理、保证金、账期和资金流责任",
-    source: "AIPowerPay：一站式跨境支付解决方案 (4).pdf"
+    directStatus: "AI 可接待确认",
+    stage: "2026-06-19 Jerry 口头确认 AI 陪聊可接;cash 16 个点;无保证金;拒付率没要求。当前可作为闲闲 AI 陪聊备份线索,但 cash 含义和全套费用仍需补问",
+    fee: "口头报价:cash 16%。待确认 cash 是否指 Visa/Mastercard 卡支付/信用卡收单,以及是否 all-in;需补退款费、拒付费、RDR/Ethoca、提现费、账期和结算币种",
+    settlement: "口头称无保证金;账期、滚动准备金、提现门槛、结算主体和资金流责任待确认",
+    fit: "闲闲 AI 陪聊/高风险订阅备份卡通道;适合作为 Waffo/Antom/Segpay 路径之外的备用报价线索",
+    limit: "不能直接对外承诺已上线;必须确认 cash 定义、16% 是否全包、拒付率无要求的真实边界、支持地区/币种/主体、拒付预警与资金安全条款",
+    source: "Jerry 微信口头报价 2026-06-19 / AIPowerPay：一站式跨境支付解决方案 (4).pdf"
   },
   {
     name: "Segpay / Epoch",
