@@ -1,5 +1,5 @@
-// 通道雷达数据 - 最后更新 2026-06-19 v6
-// 共 137 条 (104 + Antom子方式32 + AI PowerPay 新线索1，入库完成)
+// 通道雷达数据 - 最后更新 2026-06-30 v7
+// 共 138 条 (104 + Antom子方式32 + AI PowerPay + GlodraPay/Global Acquire 新线索，入库完成)
 // schema: 新增 region(地区) + role(角色) 两个维度，替代原单一 type
 // role 新增"支付辅助服务"类目(跨拒通拒付管理 / 反欺诈 / 风控类)
 window.CHANNELS_DATA = [
@@ -7,7 +7,8 @@ window.CHANNELS_DATA = [
   {name:"Antom",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L4 业务补全",hq:"新加坡 / 杭州",max_market:"东南亚+全球",coverage:"全球",sub:7,rate:6,market:9,cb:7,multi:8,settle:6,window:0,cost:"中 1.5",diff:"全球聚合基本盘，东南亚5国订阅钱包一签覆盖。直连特殊类目受限，且有保证金要求",biz1:7.35,biz2:7.7,ai:"❌不接"},
   {name:"Antom 非直连",region:"美区",role:"MoR",gate:"⏳ 待评",hk:"⚠️",rec:"观察",driver:"L3 战略窗口",hq:"代理商",max_market:"美区",coverage:"全球",sub:7,rate:6,market:8,cb:7,multi:6,settle:6,window:1,cost:"中 1.5",diff:"通过子商户/聚合商身份接入，可能覆盖部分直连受限场景；等报价中",biz1:0,biz2:0,ai:"⏳待问"},
   {name:"Stripe",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L1 客户订单",hq:"US",max_market:"全球",coverage:"全球",sub:9,rate:5,market:8,cb:8,multi:9,settle:7,window:1,cost:"中 1.5",diff:"订阅引擎和全球卡能力强，但特殊类目限制严格",biz1:7.05,biz2:7.4,ai:"❌不接"},
-  {name:"Appota",region:"越南菲律宾",role:"本地 PSP",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"🟢 已锁接入",driver:"L1 客户订单",hq:"越南",max_market:"越南",coverage:"VN",sub:6,rate:8,market:5,cb:5,multi:5,settle:6,window:1,cost:"中 1.5",diff:"越南本地支付重点候选，网银费率最低约1.1%，适合越南启动场景",biz1:6.45,biz2:5.6,ai:"未知"},
+  {name:"Appota",region:"越南菲律宾",role:"本地 PSP",gate:"⚠️ 暂停",hk:"⚠️",rec:"备选",driver:"L1 客户订单",hq:"越南",max_market:"越南",coverage:"VN",sub:6,rate:8,market:5,cb:5,multi:5,settle:6,window:1,cost:"中 1.5",diff:"越南本地支付重点候选，网银费率最低约1.1%，但 2026-06 已因缺越南资质/从业许可直连接入暂停；保留成本基准和本地钱包覆盖参考",biz1:6.05,biz2:5.35,ai:"未知"},
+  {name:"GlodraPay / Global Acquire",region:"越南菲律宾",role:"本地 PSP/聚合商",gate:"⏳ 待评",hk:"⚠️",rec:"观察",driver:"L1 客户订单",hq:"待确认",max_market:"越南",coverage:"VN 本地支付/订阅待确认",sub:7,rate:6,market:5.5,cb:5.5,multi:5.5,settle:5.5,window:1,cost:"中 1.5",diff:"李总越南订阅支付新路径。2026-06-26 锐浩确认对方有越南订阅支付能力，当前等待申请门槛、主体要求、费率账期、钱包/网银覆盖和是否可替代 Appota 直连",biz1:0,biz2:6.1,ai:"⏳待问"},
   {name:"Razorpay",region:"印度",role:"本地 PSP",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L2 资方",hq:"印度",max_market:"印度",coverage:"IN",sub:8,rate:7,market:6,cb:7,multi:5,settle:7,window:1,cost:"中 1.5",diff:"印度PSP#1，55%市占，PA-CB牌照HK直签无需印度实体",biz1:7.05,biz2:6.35,ai:"未知"},
   {name:"PagBrasil",region:"拉美",role:"本地 PSP",gate:"✅ PASS",hk:"✅",rec:"🟢 已锁接入",driver:"L2 资方",hq:"巴西",max_market:"巴西",coverage:"BR",sub:9.5,rate:6,market:5,cb:7,multi:5,settle:7,window:2,cost:"中 1.5",diff:"PagStream订阅能力9.5全候选最高+PIX 1.99%+HK直结",biz1:7.35,biz2:7.38,ai:"未知"},
 
@@ -24,7 +25,7 @@ window.CHANNELS_DATA = [
   {name:"Airwallex",region:"全球",role:"全球聚合商",gate:"⚠️ 部分FAIL",hk:"✅",rec:"备选",driver:"L4 业务补全",hq:"HK / 墨尔本",max_market:"中国出海+全球",coverage:"150+ 国",sub:8,rate:7,market:8,cb:7,multi:6,settle:8,window:1,cost:"中 1.5",diff:"HK 总部直签最顺路径+中国出海客户红利。云汇即此公司",biz1:7.55,biz2:7.35,ai:"未知"},
   {name:"VailPay",region:"全球",role:"全球聚合商",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"备选",driver:"L5 观察",hq:"亚洲",max_market:"中国出海+东南亚",coverage:"40+ 国",sub:6,rate:6,market:7,cb:6,multi:6,settle:6,window:1,cost:"中 1.5",diff:"中国出海支付服务商,覆盖中港韩泰马印菲越新美英欧 40+ 国,100+ 支付方式。服务跨境电商/游戏/海外直播/数字商品/旅游,2024.12 刊例。HK 直签待验证",biz1:6,biz2:5.8,ai:"⏳待问"},
   {name:"PayerMax",region:"全球",role:"全球聚合商",gate:"⚠️ 条件PASS",hk:"⚠️",rec:"备选",driver:"L5 观察",hq:"新加坡",max_market:"东南亚+新兴市场",coverage:"150+ 国",sub:7,rate:6,market:8.5,cb:6.5,multi:8,settle:5.5,window:1,cost:"中 1.5",diff:"新加坡 MAS 全牌照(SHAREit/茄子科技旗下),收单+收款+正式 ISV 模式适合中间商。东南亚全钱包+巴西 PIX/Boleto+MENA,150 国 600+ 支付方式,覆盖最强项。订阅/社交直播打赏强。费率未公开需个案报价,T+2 周账期偏慢。特殊类目接受度待 BD 报备。Trustpilot 1.9 有兑现落差投诉。2026-05-20 调研",biz1:6.73,biz2:7.15,ai:"⏳待问"},
-  {name:"AI PowerPay",region:"待确认",role:"电子钱包/全球聚合商",gate:"⏳ 待评",hk:"⚠️",rec:"备选",driver:"L1 客户订单",hq:"待确认",max_market:"AI陪聊/高风险订阅",coverage:"CASH电子钱包覆盖待确认",sub:6,rate:4,market:6,cb:5,multi:5,settle:5,window:1,cost:"重 2.5",diff:"Jerry 口头确认 AI 陪聊可接,CASH 16 个点,无保证金,拒付率没要求。2026-06-22 锐浩确认 CASH 为电子钱包,不是信用卡/卡收单;需核实 CASH 覆盖哪些钱包/地区/币种,以及16%是否全包、账期、退款/争议费、RDR/Ethoca、reserve、拒付率无要求的真实含义。",biz1:0,biz2:6.45,ai:"✅可接"},
+  {name:"AI PowerPay",region:"待确认",role:"电子钱包/全球聚合商",gate:"⏳ 待评",hk:"⚠️",rec:"观察",driver:"L1 客户订单",hq:"待确认",max_market:"AI陪聊/高风险订阅",coverage:"CASH电子钱包覆盖待确认",sub:5.5,rate:4,market:5.5,cb:4.5,multi:5,settle:5,window:1,cost:"重 2.5",diff:"Jerry 口头确认 AI 陪聊可接,CASH 16 个点,无保证金,拒付率没要求。2026-06-22 锐浩确认 CASH 为电子钱包,不是信用卡/卡收单；因不支持订阅卡收单，暂不能作为美区订阅支付主备线，只保留二次反馈和钱包覆盖核实",biz1:0,biz2:5.8,ai:"✅可接"},
   {name:"Oceanpayment",region:"全球",role:"全球聚合商",gate:"✅ PASS",hk:"✅",rec:"备选",driver:"L5 观察",hq:"中国香港",max_market:"跨境电商/游戏出海",coverage:"200+ 国",sub:7,rate:6,market:8,cb:6.5,multi:6,settle:5.5,window:1,cost:"中 1.5",diff:"老牌正规跨境收单 PSP(2014,香港总部,PCI DSS L1+新加坡 MPI 牌照,海闻教授顾问)。全卡组直连(Visa/MC/Amex/Discover/银联/JCB),500+支付产品,200+国家,140+货币。HK 直签顺路。风控严，特殊类目大概率拒签，更适合正规游戏/订阅/电商。费率约 3-3.8%+$0.30 跨境卡,账期/reserve 未公开需问商务。2026-05-20 调研",biz1:6.65,biz2:6.65,ai:"❌不接"},
 
   // ========== MoR ==========
@@ -119,7 +120,7 @@ window.CHANNELS_DATA = [
   {name:"Coinbase Commerce",region:"加密链",role:"加密 PSP",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"Gate失败",hq:"旧金山",max_market:"美国",coverage:"US/SG",sub:3.5,rate:7.5,market:5,cb:9,multi:3.5,settle:7,window:0,cost:"重 2.5",diff:"2026-03-31 已关停非美/非新加坡商户，HK 不可签",biz1:6.18,biz2:5.3,ai:"❌不接"},
 
   // ========== 美区新增 - 中国系 ISO/MoR ==========
-  {name:"美区高风险卡通道 A",region:"美区",role:"MoR",gate:"✅ PASS",hk:"✅",rec:"🏆 强推",driver:"L1 客户订单",hq:"中国",max_market:"美区高风险订阅",coverage:"US",sub:8,rate:7,market:5,cb:8,multi:5,settle:8,window:2,cost:"中 1.5",diff:"美区高风险订阅 MoR，已完成基础尽调；T+3 结算，拒付成本结构较友好，需持续监控主体稳定性",biz1:7.5,biz2:6.5,ai:"✅可接"},
+  {name:"Kevin 美区高风险卡通道",region:"美区",role:"MoR/代理收单",gate:"⚠️ 条件PASS",hk:"✅",rec:"观察",driver:"L1 客户订单",hq:"中国/上游待确认",max_market:"美区 AI 视频/AI 陪聊/短剧订阅",coverage:"US Visa/Mastercard",sub:8,rate:5.5,market:6,cb:7,multi:5,settle:7,window:1,cost:"重 2.5",diff:"2026-06-23/30 Kevin 方案:基础 8.5%+$0.30,我方对客 10.5%+$0.30;拒付$25,退款$1,RDR$20,Ethoca$25,提现$30/笔,T+7日结;固保$50K+循保10%/180天，若连续6个月无问题且循保累计$300K可退固保。宝龙不接受前置固保，愿改 15% 循保，需继续谈释放、扣款触发和罚金责任边界",biz1:6.7,biz2:6.2,ai:"✅可接"},
   {name:"Waffo",region:"全球",role:"MoR",gate:"⚠️ 条件PASS",hk:"✅",rec:"备选",driver:"L3 战略窗口",hq:"欧洲",max_market:"亚太+全球卡",coverage:"印尼/菲律宾/越南/新马泰/港陆/台湾/日韩/全球卡",sub:7,rate:6,market:8,cb:7,multi:5,settle:5,window:1,cost:"中 1.5",diff:"2026-06-16 深圳泰济绿色业务报价:全球卡3.40%+$0.50,国际卡+1%;RDR$13/Ethoca$19;本地支付覆盖亚太多市场;T+10,提现1%最低$20。旧成人/高风险10%+€0.30报价已停用",biz1:6.65,biz2:6.25,ai:"✅可接"},
   {name:"AnstPay",region:"美区",role:"MoR",gate:"❌ FAIL",hk:"⚠️",rec:"❌ 不接入",driver:"Gate失败",hq:"中国",max_market:"美区",coverage:"US",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:0,cost:"N/A",diff:"原方案类目适配度不足；替代方案涉及代结算，合规复杂，当前不接入",biz1:0,biz2:0,ai:"✅可接"},
   {name:"Asiabill",region:"美区",role:"MoR",gate:"❌ FAIL",hk:"❌",rec:"❌ 不接入",driver:"Gate失败",hq:"中国",max_market:"美区",coverage:"US",sub:0,rate:0,market:0,cb:0,multi:0,settle:0,window:0,cost:"N/A",diff:"特殊类目接受度不足，当前不接入",biz1:0,biz2:0,ai:"❌不接"},
@@ -262,13 +263,24 @@ window.CONNECTED_CHANNELS = [
   {
     name: "AIPowerPay",
     category: "一站式跨境支付 / CASH 电子钱包",
-    directStatus: "AI 可接待确认",
-    stage: "2026-06-19 Jerry 口头确认 AI 陪聊可接;CASH 16 个点;无保证金;拒付率没要求。2026-06-22 锐浩确认 CASH 为电子钱包。当前可作为闲闲 AI 陪聊备份线索,但 CASH 覆盖钱包、地区和全套费用仍需补问",
+    directStatus: "观察待二次反馈",
+    stage: "2026-06-19 Jerry 口头确认 AI 陪聊可接;CASH 16 个点;无保证金;拒付率没要求。2026-06-22 锐浩确认 CASH 为电子钱包。2026-06-26 确认当前不能作为美区订阅卡主备线,只等对方二次反馈是否存在可行订阅方案",
     fee: "口头报价:CASH 电子钱包 16%。待确认覆盖哪些钱包/地区/币种、是否 all-in;需补退款费、争议/拒付费、RDR/Ethoca、提现费、账期和结算币种",
     settlement: "口头称无保证金;账期、滚动准备金、提现门槛、结算主体和资金流责任待确认",
-    fit: "闲闲 AI 陪聊/高风险订阅备份卡通道;适合作为 Waffo/Antom/Segpay 路径之外的备用报价线索",
-    limit: "不能直接对外承诺已上线;必须确认 cash 定义、16% 是否全包、拒付率无要求的真实边界、支持地区/币种/主体、拒付预警与资金安全条款",
+    fit: "AI 陪聊/高风险产品的电子钱包线索;可作为卡收单之外的补充询价对象",
+    limit: "不是已确认的 Visa/Mastercard 订阅卡收单;不能直接对外承诺可上线。必须确认 CASH 定义、支持地区/币种、16% 是否全包、拒付率无要求的真实边界和资金安全条款",
     source: "Jerry 微信口头报价 2026-06-19 / AIPowerPay：一站式跨境支付解决方案 (4).pdf"
+  },
+  {
+    name: "Kevin 美区高风险卡通道",
+    category: "美区 Visa/Mastercard / AI 高风险订阅",
+    directStatus: "保证金谈判中",
+    stage: "方案已发给 SparkLab/宝龙,暂未发闲闲。Kevin 解释固保主要覆盖 AI 视频版权/肖像侵权导致的卡组或通道罚金和商户逃单风险;宝龙不接受上线前 $50K 固保,愿把循保提高到 15%",
+    fee: "底层报价 8.5% + USD 0.30/笔;我方对客口径 10.5% + USD 0.30/笔;退款 USD 1;拒付 USD 25;RDR USD 20;Ethoca USD 25;提现 USD 30/笔",
+    settlement: "T+7 日结;固保 USD 50,000 + 循保 10% 锁 180 天。当前上游口径:连续 6 个月无问题且循保累计 USD 300,000 后可退固保;宝龙提出 0 固保 + 15% 循保替代结构",
+    fit: "AI 视频、AI 陪聊、短剧等美区高风险 H5 订阅卡收单,尤其是 Stripe/Antom 直连难过审的场景",
+    limit: "现金占用重,拒付红线和内容违规罚金责任必须合同化;固保释放、扣款触发、商户补款顺序和主体/资金路径未确认前不能当成已成交方案",
+    source: "2026-06-23/24 Kevin 报价 + 2026-06-30 Kevin/宝龙沟通"
   },
   {
     name: "Segpay / Epoch",
@@ -296,12 +308,23 @@ window.CONNECTED_CHANNELS = [
     name: "Appota",
     category: "越南本地支付聚合",
     directStatus: "阶段性暂停",
-    stage: "已建联并拿正式报价;2026-06-15 因无越南从业资格证被拒,直连接入暂停",
+    stage: "已建联并拿正式报价;2026-06 因缺越南资质/从业许可,直连接入暂停。当前作为越南成本基准和备选 MoR 路径保留",
     fee: "ATM 卡 0.8% + 550 VND;Appota 钱包 0.8%;ZaloPay/ShopeePay/VNPT 1.5%;QR 0.5% 最低 2,200 VND",
     settlement: "T+1 working day;≤$10,000 结算费 0.22% + $27.5;>$10,000 免结算费",
     fit: "越南本地游戏/数字内容/工具类,需要 MoMo/ZaloPay/银行/QR 的本地化收款",
     limit: "需要越南本地从业资格/经营许可;当前不能作为对客户可落地报价,只保留成本基准",
     source: "渠道BD跟进/Appota"
+  },
+  {
+    name: "GlodraPay / Global Acquire",
+    category: "越南本地支付 / 订阅支付线索",
+    directStatus: "等申请门槛",
+    stage: "李总越南支付主线从 Appota 直连切换到 GlodraPay/Global Acquire 路径;对方有越南订阅支付能力,正在等申请门槛和接入要求",
+    fee: "待补:需确认本地钱包/网银/卡费率、退款/拒付费、开户费、保证金和最低流水",
+    settlement: "待补:需确认结算周期、结算币种、提现费、主体/资金路径和是否需要越南本地主体",
+    fit: "李总越南订阅支付、腾讯会员权益越南测试、越南本地钱包/VM 卡/H5 订阅接入",
+    limit: "尚未拿到正式门槛和报价;未确认 HK/新加坡/越南主体签约路径前不能对客户承诺落地",
+    source: "当前进行中 2026-06-26 李总/越南支付更新"
   },
   {
     name: "Airwallex / 云汇",
@@ -413,7 +436,7 @@ window.BIZ_LABELS = {
 
 // 元数据
 window.META = {
-  lastUpdated: "2026-06-19",
-  totalCount: 137,
+  lastUpdated: "2026-06-30",
+  totalCount: 138,
   feishuUrl: "https://gcn9eq0plpq9.feishu.cn/base/QLySbEoyVae0pZsDjqucUGHKnGe?table=tblxC8TQmax7De1s&view=vewCBixMon"
 };
