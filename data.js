@@ -371,6 +371,231 @@ window.CONNECTED_CHANNELS = [
   }
 ];
 
+// ========== 通道雷达 v2: 业务类型 / 客户 / 历史方案 / 推荐请求 ==========
+window.BUSINESS_CATEGORIES = [
+  {
+    id: "ai_tool_us_card",
+    name: "AI 工具 / AI 笔记美区卡",
+    parent: "AI 订阅",
+    status: "可复用",
+    fit_customers: ["AI 笔记", "AI 文档", "AI 办公", "普通 AI 工具订阅"],
+    unfit_customers: ["AI 成人", "AI 陪聊", "明星/版权高风险视频", "真钱/博彩"],
+    markets: ["美国"],
+    main_path: "Waffo 美区卡收单",
+    backup_path: "Wintopay / Kevin 美区卡",
+    auxiliary: ["跨拒通 RDR/Ethoca", "拒付监控"],
+    related_cases: ["case_sparklab_lunote_waffo"],
+    risks: ["类目审核", "版权风险", "拒付率", "保证金", "账期"],
+    reuse_conditions: ["同类 AI 工具", "非成人", "版权风险可控", "有主体", "ARPU 足够"],
+    required_gates: ["类目可接", "成本可算", "资金路径清楚", "风险责任清楚"]
+  },
+  {
+    id: "ai_high_risk_us_card",
+    name: "AI 高风险订阅美区卡",
+    parent: "AI 订阅",
+    status: "条件推荐",
+    fit_customers: ["AI 视频", "AI 陪聊", "AI 短剧", "擦边内容订阅"],
+    unfit_customers: ["真金博彩", "明确违法内容", "无法承担保证金的客户"],
+    markets: ["美国"],
+    main_path: "Kevin / Wintopay 美区卡",
+    backup_path: "Segpay / Epoch / AnstPay 兜底询价",
+    auxiliary: ["跨拒通 RDR/Ethoca", "内容风控审核", "备用结算路径"],
+    related_cases: ["case_hk_baojin_wintopay"],
+    risks: ["版权/肖像侵权", "卡组罚金", "固保现金占用", "拒付红线", "主体寿命"],
+    reuse_conditions: ["客户接受保证金或高循保", "内容边界可解释", "拒付率可控"],
+    required_gates: ["类目可接", "保证金可接受", "拒付红线明确", "罚金责任明确"]
+  },
+  {
+    id: "vietnam_local_subscription",
+    name: "越南本地订阅支付",
+    parent: "本地支付",
+    status: "待核验",
+    fit_customers: ["越南会员订阅", "越南本地钱包收款", "越南工具/内容产品"],
+    unfit_customers: ["无越南资质且不接受替代主体", "只需要美区卡的客户"],
+    markets: ["越南"],
+    main_path: "GlodraPay / Global Acquire 待确认",
+    backup_path: "Appota 成本基准 / MoR 路径",
+    auxiliary: ["越南主体/MoR 评估", "VND 结算路径"],
+    related_cases: ["case_lizong_vietnam"],
+    risks: ["本地主体资质", "recurring 能力", "结算币种", "申请门槛"],
+    reuse_conditions: ["越南本地支付需求明确", "可补本地资质或接受 MoR 路径"],
+    required_gates: ["覆盖越南", "支持订阅/代扣", "主体路径明确", "费率账期可算"]
+  },
+  {
+    id: "stablecoin_collection",
+    name: "稳定币收款 / 结算",
+    parent: "稳定币",
+    status: "可复用",
+    fit_customers: ["稳定币收款", "B2C 支付链接", "小额批量发薪", "跨境结算"],
+    unfit_customers: ["强依赖卡 token 的订阅客户", "不能接受链上/KYT 风险的客户"],
+    markets: ["全球", "土耳其"],
+    main_path: "StablePay",
+    backup_path: "NOWPayments / CoinPayments 观察",
+    auxiliary: ["KYT/AML", "出入金路径", "批量付款成本核算"],
+    related_cases: ["case_stablepay_huohua"],
+    risks: ["链上风险", "冻结/KYT", "出入金成本", "批次费"],
+    reuse_conditions: ["客户接受 USDT/USDC", "资金用途清楚", "出入金路径可解释"],
+    required_gates: ["币种支持", "资金路径清楚", "KYT/AML 边界", "到账和出款成本可算"]
+  },
+  {
+    id: "game_iap_sea",
+    name: "游戏出海 / 东南亚本地支付",
+    parent: "游戏出海",
+    status: "可用",
+    fit_customers: ["手游 IAP", "虚拟道具", "东南亚游戏充值"],
+    unfit_customers: ["真钱/博彩", "印度真金游戏", "无游戏资质高风险产品"],
+    markets: ["泰国", "越南", "菲律宾", "印尼"],
+    main_path: "Antom / Appota / Xendit",
+    backup_path: "PayerMax / Oceanpayment 观察",
+    auxiliary: ["本地钱包覆盖", "游戏类目审核"],
+    related_cases: [],
+    risks: ["本地监管", "应用商店外支付", "游戏资质", "退款/拒付"],
+    reuse_conditions: ["标准手游 IAP", "非真金", "目标市场明确"],
+    required_gates: ["游戏类目可接", "覆盖目标市场", "本地支付方式有效", "费率可算"]
+  }
+];
+
+window.CUSTOMERS = [
+  {
+    id: "cust_sparklab",
+    name: "SparkLab / Lunote",
+    status: "方案中",
+    categories: ["ai_tool_us_card"],
+    markets: ["美国"],
+    risk_tags: ["普通 AI 工具", "版权风险待控", "订阅"],
+    payment_needs: ["美区卡收单", "拒付预警"],
+    current_solution: "case_sparklab_lunote_waffo",
+    blockers: ["Waffo AI 类目确认", "最新报价/保证金核验"],
+    next_step: "向 Waffo 确认 AI 笔记类目、报价、账期和 reserve",
+    updated_at: "2026-07-02"
+  },
+  {
+    id: "cust_xianxian",
+    name: "闲闲 / Voice Friend",
+    status: "暂停/搁置",
+    categories: ["ai_high_risk_us_card"],
+    markets: ["美国", "泰国", "越南"],
+    risk_tags: ["AI 陪聊", "成人/擦边", "高拒付"],
+    payment_needs: ["美区卡收单", "拒付预警", "备用通道"],
+    current_solution: "",
+    blockers: ["领航停止合作", "新美区通道保证金重", "客户侧接受度待确认"],
+    next_step: "等待客户或新通道条件变化后重启",
+    updated_at: "2026-06-24"
+  },
+  {
+    id: "cust_lizong_vietnam",
+    name: "李总 / 越南支付",
+    status: "沟通中",
+    categories: ["vietnam_local_subscription"],
+    markets: ["越南"],
+    risk_tags: ["订阅", "本地主体/资质待确认"],
+    payment_needs: ["越南本地支付", "订阅代扣"],
+    current_solution: "case_lizong_vietnam",
+    blockers: ["GlodraPay 申请门槛待回", "Appota 直连因资质暂停"],
+    next_step: "等 GlodraPay/Global Acquire 发申请门槛",
+    updated_at: "2026-06-26"
+  },
+  {
+    id: "cust_hk_baojin",
+    name: "香港爆金 / AI 短剧",
+    status: "方案中",
+    categories: ["ai_high_risk_us_card"],
+    markets: ["美国"],
+    risk_tags: ["AI 视频", "版权/肖像风险", "保证金敏感"],
+    payment_needs: ["美区卡收单", "拒付预警"],
+    current_solution: "case_hk_baojin_wintopay",
+    blockers: ["客户不接受 $50K 固保", "只接受更高循保"],
+    next_step: "与 Kevin 确认 0 固保 + 15% 循保是否可行",
+    updated_at: "2026-06-30"
+  },
+  {
+    id: "cust_payinsider",
+    name: "Payinsider",
+    status: "已合作/拜访",
+    categories: ["ai_tool_us_card"],
+    markets: ["全球"],
+    risk_tags: ["同行学习", "编排层", "正规 SaaS"],
+    payment_needs: ["支付编排", "订阅恢复", "智能路由"],
+    current_solution: "",
+    blockers: ["固定费对小客户不经济", "不解决高风险准入"],
+    next_step: "作为编排层对照样本和潜在合作方保留",
+    updated_at: "2026-05-28"
+  }
+];
+
+window.SOLUTION_CASES = [
+  {
+    id: "case_sparklab_lunote_waffo",
+    name: "SparkLab / Lunote Waffo 方案",
+    customer_id: "cust_sparklab",
+    category_id: "ai_tool_us_card",
+    status: "已输出 / 待按最新口径核验",
+    market: "美国",
+    roles: {main_acquirer:"Waffo", backup_acquirer:"Wintopay / Kevin", risk_control:"跨拒通 RDR/Ethoca", fund_flow:"待确认"},
+    upstream_cost_internal: "Waffo 绿色业务报价:全球卡/Apple Pay/Google Pay 3.40% + USD 0.50,国际卡 +1.00%;退款 USD 1;拒付 USD 25;RDR USD 13;Ethoca USD 19;提现 1% 最低 USD 20;T+10。",
+    our_fee_internal: "待按客户最终报价测算;内部可见。",
+    client_pricing_public: "客户最终报价待按最新 Waffo 类目和成本重算。",
+    settlement_terms_public: "账期/保证金需按最新合同口径确认。",
+    reuse_conditions: ["AI 笔记/AI 工具", "非成人", "版权风险可控", "ARPU 足够覆盖固定费"],
+    unfit_conditions: ["AI 成人/陪聊", "明星/版权高风险视频", "极高拒付", "客户无法接受账期/保证金"],
+    files: ["待补飞书方案链接", "Waffo quotation sheet to 深圳泰济-V1-2026-06-16.pdf"],
+    visibility: "internal"
+  },
+  {
+    id: "case_hk_baojin_wintopay",
+    name: "香港爆金 / AI 短剧 Wintopay 美区卡方案",
+    customer_id: "cust_hk_baojin",
+    category_id: "ai_high_risk_us_card",
+    status: "已输出 / 保证金谈判中",
+    market: "美国",
+    roles: {main_acquirer:"Wintopay / Kevin 美区卡", backup_acquirer:"Waffo 待类目确认", risk_control:"RDR/Ethoca", fund_flow:"客户主体资料 + 通道结算路径待确认"},
+    upstream_cost_internal: "底层报价 8.5% + USD 0.30/笔;退款 USD 1;拒付 USD 25;RDR USD 20;Ethoca USD 25;提现 USD 30/笔;固保 USD 50,000 + 循保 10%。",
+    our_fee_internal: "对客口径 10.5% + USD 0.30/笔,退款/拒付/预警/提现/保证金实报实销。",
+    client_pricing_public: "10.5% + USD 0.30/笔,退款/拒付/预警/提现/保证金按客户侧规则承担。",
+    settlement_terms_public: "T+7 日结;固保和循保释放条件待合同确认。",
+    reuse_conditions: ["AI 视频/短剧", "客户可接受固保或高循保", "内容版权风险可解释"],
+    unfit_conditions: ["客户完全不接受保证金", "明显侵权内容", "拒付率不可控"],
+    files: ["深圳泰济科技有限公司-集团AI产品美区卡支付报价图-v2-2026-06-25.png"],
+    visibility: "internal"
+  },
+  {
+    id: "case_lizong_vietnam",
+    name: "李总越南订阅支付方案",
+    customer_id: "cust_lizong_vietnam",
+    category_id: "vietnam_local_subscription",
+    status: "待申请门槛",
+    market: "越南",
+    roles: {main_acquirer:"GlodraPay / Global Acquire 待确认", backup_acquirer:"Appota 成本基准", risk_control:"待定", fund_flow:"越南主体/MoR 路径待确认"},
+    upstream_cost_internal: "GlodraPay 费率和门槛待补;Appota 成本基准:ATM 0.8% + 550 VND,钱包 0.8%-1.5%,QR 0.5% min 2,200 VND。",
+    our_fee_internal: "待按门槛和客户体量测算。",
+    client_pricing_public: "待确认申请门槛后输出。",
+    settlement_terms_public: "VND/结算周期/主体路径待确认。",
+    reuse_conditions: ["越南本地订阅支付", "客户可提供或接受本地主体/MoR 路径"],
+    unfit_conditions: ["只做美区卡", "不能满足越南资质要求"],
+    files: ["待补"],
+    visibility: "internal"
+  },
+  {
+    id: "case_stablepay_huohua",
+    name: "火花投资 StablePay 稳定币收付方案",
+    customer_id: "",
+    category_id: "stablecoin_collection",
+    status: "已输出 / 排期中",
+    market: "全球 / 土耳其",
+    roles: {main_acquirer:"StablePay", backup_acquirer:"NOWPayments 观察", risk_control:"KYT/AML", fund_flow:"USDT 收款/代发"},
+    upstream_cost_internal: "代理底价:收款/支付链接 0.85%;订阅 1.11%;代发 0.085% + 3 USDT/批次;出入金 0.3%。",
+    our_fee_internal: "代理返佣月结,按 StablePay 代理协议确认。",
+    client_pricing_public: "按客户业务场景另出。",
+    settlement_terms_public: "链上/批次规则按接入确认。",
+    reuse_conditions: ["客户接受 USDT/USDC", "收款/发薪用途清楚", "可接受链上风险"],
+    unfit_conditions: ["必须卡 token 续费", "无法接受 KYT/AML"],
+    files: ["StablePay费率详情", "火花投资客户档案"],
+    visibility: "internal"
+  }
+];
+
+window.RECOMMENDATION_REQUESTS = [];
+
 // 业务定义（可扩展）
 // matchScore 用于在线页按通用业务场景排序,不改动原始通道评分。
 window.BUSINESSES = [

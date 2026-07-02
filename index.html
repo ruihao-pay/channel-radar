@@ -61,6 +61,9 @@
   <div class="max-w-7xl mx-auto px-4">
     <div class="flex gap-1 overflow-x-auto">
       <button data-tab="decision" class="tab-btn active px-4 py-3 text-sm font-medium border-b-2 border-gray-900 text-gray-900 whitespace-nowrap">决策台</button>
+      <button data-tab="categories" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 whitespace-nowrap">业务类型</button>
+      <button data-tab="customers" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 whitespace-nowrap">客户方案</button>
+      <button data-tab="recommend" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 whitespace-nowrap">推荐工作台</button>
       <button data-tab="connected" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 whitespace-nowrap">已对接渠道</button>
       <button data-tab="business" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 whitespace-nowrap">业务专题</button>
       <button data-tab="overview" class="tab-btn px-4 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900 whitespace-nowrap">全部通道</button>
@@ -168,6 +171,10 @@ const data = window.CHANNELS_DATA || [];
 const META = window.META || {};
 const BUSINESSES = window.BUSINESSES || [];
 const CONNECTED_CHANNELS = window.CONNECTED_CHANNELS || [];
+const BUSINESS_CATEGORIES = window.BUSINESS_CATEGORIES || [];
+const CUSTOMERS = window.CUSTOMERS || [];
+const SOLUTION_CASES = window.SOLUTION_CASES || [];
+const RECOMMENDATION_REQUESTS = window.RECOMMENDATION_REQUESTS || [];
 const BIZ_LABELS = window.BIZ_LABELS || {biz1:"业务一", biz2:"业务二"};
 const FILTER_IDS = ['search','filter-region','filter-role','filter-gate','filter-rec','filter-ai','filter-hk','filter-risk','sort-by'];
 const RESET_IDS = ['filter-region','filter-role','filter-gate','filter-rec','filter-ai','filter-hk','filter-risk','sort-by'];
@@ -272,9 +279,11 @@ function readURLParams() {
 function updateURL() {
   const params = new URLSearchParams();
   if (currentTab !== 'decision') params.set('tab', currentTab);
-  if (currentTab !== 'connected' && currentView !== 'cards') params.set('view', currentView);
+  const usesChannelView = ['overview','matrix','stats','business'].includes(currentTab);
+  const usesGlobalFilters = !['connected','categories','customers','recommend'].includes(currentTab);
+  if (usesChannelView && currentView !== 'cards') params.set('view', currentView);
   if (currentTab === 'business' && currentBiz !== (BUSINESSES[0]&&BUSINESSES[0].id)) params.set('biz', currentBiz);
-  if (currentTab !== 'connected') {
+  if (usesGlobalFilters) {
     FILTER_IDS.forEach(id => {
       const v = document.getElementById(id).value;
       if (v) params.set(id, v);
@@ -307,7 +316,7 @@ function setTab(tab) {
 }
 
 function updateTabChrome() {
-  const hideGlobalTools = currentTab === 'connected';
+  const hideGlobalTools = ['connected','categories','customers','recommend'].includes(currentTab);
   document.getElementById('dashboard').classList.toggle('hidden', hideGlobalTools);
   document.getElementById('filters').classList.toggle('hidden', hideGlobalTools);
 }
@@ -436,6 +445,9 @@ function applyFilters() {
 function render() {
   const root = document.getElementById('content');
   if (currentTab === 'decision') return renderDecision(root);
+  if (currentTab === 'categories') return renderCategories(root);
+  if (currentTab === 'customers') return renderCustomers(root);
+  if (currentTab === 'recommend') return renderRecommend(root);
   if (currentTab === 'connected') return renderConnected(root);
   if (currentTab === 'matrix') return renderMatrix(root);
   if (currentTab === 'stats') return renderStats(root);
@@ -922,6 +934,305 @@ function renderTable(root) {
           `;}).join('')}
         </tbody>
       </table>
+    </div>
+  `;
+}
+
+// ============ 业务类型 / 客户方案 / 推荐工作台 ============
+function tagList(items, color = 'gray') {
+  const palette = {
+    gray: 'border-gray-200 bg-gray-50 text-gray-700',
+    green: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+    red: 'border-red-200 bg-red-50 text-red-700',
+    blue: 'border-blue-200 bg-blue-50 text-blue-700',
+    amber: 'border-amber-200 bg-amber-50 text-amber-800'
+  };
+  const cls = palette[color] || palette.gray;
+  const list = Array.isArray(items) ? items : String(items || '').split(/[、,，/]+/);
+  const tags = list.map(s => String(s).trim()).filter(Boolean);
+  return `<div class="flex flex-wrap gap-1.5">${tags.map(tag => `<span class="inline-flex items-center rounded border px-2 py-1 text-xs leading-tight ${cls}">${tag}</span>`).join('') || '<span class="text-xs text-gray-400">待补</span>'}</div>`;
+}
+
+function statusPill(status) {
+  const s = String(status || '待补');
+  if (s.includes('可复用') || s.includes('可用') || s.includes('已合作')) return 'bg-emerald-100 text-emerald-800';
+  if (s.includes('条件') || s.includes('方案') || s.includes('沟通') || s.includes('谈判')) return 'bg-amber-100 text-amber-800';
+  if (s.includes('待') || s.includes('核验')) return 'bg-blue-100 text-blue-800';
+  if (s.includes('暂停') || s.includes('搁置')) return 'bg-red-100 text-red-700';
+  return 'bg-gray-100 text-gray-700';
+}
+
+function findCase(id) {
+  return SOLUTION_CASES.find(item => item.id === id);
+}
+
+function findCustomer(id) {
+  return CUSTOMERS.find(item => item.id === id);
+}
+
+function categoryCandidates(category, limit = 5) {
+  const text = [
+    category.name,
+    category.parent,
+    category.main_path,
+    category.backup_path,
+    ...(category.markets || []),
+    ...(category.fit_customers || []),
+    ...(category.auxiliary || []),
+    ...(category.required_gates || [])
+  ].join(' ').toLowerCase();
+  return data.map(d => {
+    const haystack = [d.name, d.region, d.role, d.max_market, d.coverage, d.diff, d.ai, d.rec, d.gate].join(' ').toLowerCase();
+    let score = priorityScore(d);
+    const name = String(d.name || '').toLowerCase();
+    if (text && name && text.includes(name)) score += 24;
+    if ((category.markets || []).some(m => haystack.includes(String(m).toLowerCase()))) score += 16;
+    if (text.includes('高风险') && riskLevel(d) === '🔴 可接高风险') score += 18;
+    if (text.includes('ai') && d.ai === '✅可接') score += 14;
+    if (text.includes('稳定币') && /stable|稳定币|usdt|usdc|加密|链/.test(haystack)) score += 18;
+    if (text.includes('越南') && /越南|vn|vnd/.test(haystack)) score += 18;
+    if (text.includes('游戏') && (haystack.includes('游戏') || haystack.includes('iap'))) score += 12;
+    return {d, score};
+  })
+    .filter(item => !(item.d.gate || '').startsWith('❌') && item.d.role !== 'Antom子方式')
+    .sort((a,b) => b.score - a.score)
+    .slice(0, limit);
+}
+
+function renderCategories(root) {
+  const categoryCards = BUSINESS_CATEGORIES.map(category => {
+    const cases = (category.related_cases || []).map(findCase).filter(Boolean);
+    const candidates = categoryCandidates(category, 4);
+    return `
+      <div class="bg-white border rounded-lg p-4 shadow-sm">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="text-xs text-gray-500">${category.parent || '业务类型'}</div>
+            <h3 class="font-bold text-gray-900 mt-1">${category.name}</h3>
+          </div>
+          <span class="badge ${statusPill(category.status)}">${category.status || '待补'}</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+          <div>
+            <div class="text-xs font-semibold text-gray-500 mb-2">适合客户</div>
+            ${tagList(category.fit_customers, 'green')}
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-gray-500 mb-2">不适合</div>
+            ${tagList(category.unfit_customers, 'red')}
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-gray-500 mb-2">主路径</div>
+            <div class="text-sm text-gray-800">${category.main_path || '待补'}</div>
+            <div class="text-xs text-gray-500 mt-1">备选: ${category.backup_path || '待补'}</div>
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-gray-500 mb-2">必须过 Gate</div>
+            ${tagList(category.required_gates, 'blue')}
+          </div>
+        </div>
+        <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div class="rounded border bg-gray-50 p-3">
+            <div class="text-xs font-semibold text-gray-500 mb-2">可复用历史方案</div>
+            ${cases.length ? cases.map(c => `<div class="text-sm mb-2 last:mb-0"><span class="font-semibold text-gray-900">${c.name}</span><span class="text-xs text-gray-500 ml-2">${c.status}</span></div>`).join('') : '<div class="text-sm text-gray-400">暂无历史方案</div>'}
+          </div>
+          <div class="rounded border bg-gray-50 p-3">
+            <div class="text-xs font-semibold text-gray-500 mb-2">候选通道</div>
+            <div class="space-y-2">
+              ${candidates.map(({d}) => `<button class="w-full text-left text-sm hover:bg-white rounded p-1" onclick="showDetail(${data.indexOf(d)})"><span class="font-semibold text-gray-900">${d.name}</span><span class="text-xs text-gray-500 ml-2">${actionLabel(d)}</span></button>`).join('') || '<div class="text-sm text-gray-400">暂无候选</div>'}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  root.innerHTML = `
+    <div class="space-y-5">
+      <div class="bg-white border rounded-lg p-5 shadow-sm">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h2 class="text-xl font-bold text-gray-900">业务类型库</h2>
+            <p class="text-sm text-gray-500 mt-1">按客户业务先归类,再复用历史方案、候选通道和必问 Gate。</p>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+            <div class="rounded border bg-gray-50 px-3 py-2"><div class="text-[11px] text-gray-500">业务类型</div><div class="font-mono text-lg font-bold">${BUSINESS_CATEGORIES.length}</div></div>
+            <div class="rounded border bg-emerald-50 px-3 py-2"><div class="text-[11px] text-gray-500">历史方案</div><div class="font-mono text-lg font-bold text-emerald-700">${SOLUTION_CASES.length}</div></div>
+            <div class="rounded border bg-blue-50 px-3 py-2"><div class="text-[11px] text-gray-500">客户</div><div class="font-mono text-lg font-bold text-blue-700">${CUSTOMERS.length}</div></div>
+            <div class="rounded border bg-amber-50 px-3 py-2"><div class="text-[11px] text-gray-500">推荐请求</div><div class="font-mono text-lg font-bold text-amber-700">${RECOMMENDATION_REQUESTS.length}</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">${categoryCards}</div>
+    </div>
+  `;
+}
+
+function renderCustomers(root) {
+  const rows = CUSTOMERS.map(customer => {
+    const currentCase = findCase(customer.current_solution);
+    const categories = (customer.categories || []).map(id => BUSINESS_CATEGORIES.find(c => c.id === id)).filter(Boolean);
+    return `
+      <div class="bg-white border rounded-lg p-4 shadow-sm">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h3 class="font-bold text-gray-900">${customer.name}</h3>
+            <p class="text-xs text-gray-500 mt-1">${(customer.markets || []).join(' / ') || '市场待补'} · 更新 ${customer.updated_at || '待补'}</p>
+          </div>
+          <span class="badge ${statusPill(customer.status)}">${customer.status || '待补'}</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+          <div>
+            <div class="text-xs font-semibold text-gray-500 mb-2">业务归类</div>
+            ${tagList(categories.map(c => c.name), 'blue')}
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-gray-500 mb-2">支付需求</div>
+            ${tagList(customer.payment_needs, 'green')}
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-gray-500 mb-2">风险标签</div>
+            ${tagList(customer.risk_tags, 'amber')}
+          </div>
+        </div>
+        <div class="mt-4 rounded border bg-gray-50 p-3">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div class="text-xs font-semibold text-gray-500 mb-1">当前方案</div>
+              <div class="text-sm font-semibold text-gray-900">${currentCase ? currentCase.name : '暂无绑定方案'}</div>
+              <div class="text-xs text-gray-500 mt-1">${currentCase ? currentCase.status : '需要先补方案或标记为观察'}</div>
+            </div>
+            <div>
+              <div class="text-xs font-semibold text-gray-500 mb-1">下一步</div>
+              <div class="text-sm text-gray-800">${customer.next_step || '待补'}</div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <div class="text-xs font-semibold text-gray-500 mb-2">阻塞点</div>
+            ${tagList(customer.blockers, 'red')}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  const caseRows = SOLUTION_CASES.map(c => {
+    const customer = findCustomer(c.customer_id);
+    return `
+      <tr class="border-t align-top hover:bg-gray-50">
+        <td class="px-3 py-3">
+          <div class="font-semibold text-gray-900">${c.name}</div>
+          <div class="text-xs text-gray-500 mt-1">${customer ? customer.name : '未绑定客户'} · ${c.market || '市场待补'}</div>
+        </td>
+        <td class="px-3 py-3"><span class="badge ${statusPill(c.status)}">${c.status}</span></td>
+        <td class="px-3 py-3 text-gray-700">${c.client_pricing_public || '待补'}</td>
+        <td class="px-3 py-3 text-gray-700">${c.settlement_terms_public || '待补'}</td>
+        <td class="px-3 py-3">${tagList(c.reuse_conditions, 'green')}</td>
+        <td class="px-3 py-3">${tagList(c.unfit_conditions, 'red')}</td>
+      </tr>
+    `;
+  }).join('');
+
+  root.innerHTML = `
+    <div class="space-y-5">
+      <div class="bg-white border rounded-lg p-5 shadow-sm">
+        <h2 class="text-xl font-bold text-gray-900">客户方案看板</h2>
+        <p class="text-sm text-gray-500 mt-1">按客户记录当前路径、卡点、下一步;下方保留可复用方案明细。</p>
+      </div>
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">${rows}</div>
+      <div class="bg-white border rounded-lg shadow-sm overflow-hidden">
+        <div class="px-4 py-3 border-b">
+          <h3 class="font-bold text-gray-900">历史方案库</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[1500px] table-fixed text-sm">
+            <thead class="bg-gray-50 text-xs text-gray-600">
+              <tr>
+                <th class="px-3 py-2 text-left w-[260px]">方案</th>
+                <th class="px-3 py-2 text-left w-[170px]">状态</th>
+                <th class="px-3 py-2 text-left w-[300px]">对客报价</th>
+                <th class="px-3 py-2 text-left w-[260px]">账期/结算</th>
+                <th class="px-3 py-2 text-left w-[260px]">复用条件</th>
+                <th class="px-3 py-2 text-left w-[250px]">不适用条件</th>
+              </tr>
+            </thead>
+            <tbody>${caseRows}</tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderRecommend(root) {
+  const recommendationRows = BUSINESS_CATEGORIES.map(category => {
+    const candidates = categoryCandidates(category, 3);
+    const primary = candidates[0]?.d;
+    const cases = (category.related_cases || []).map(findCase).filter(Boolean);
+    return `
+      <div class="bg-white border rounded-lg p-4 shadow-sm">
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <h3 class="font-bold text-gray-900">${category.name}</h3>
+            <p class="text-xs text-gray-500 mt-1">${(category.markets || []).join(' / ') || '市场待补'} · ${category.status || '待补'}</p>
+          </div>
+          <span class="badge ${statusPill(category.status)}">${category.parent || '业务'}</span>
+        </div>
+        <div class="mt-4 grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div class="rounded border bg-emerald-50 p-3">
+            <div class="text-xs font-semibold text-emerald-700 mb-1">首选路径</div>
+            <div class="text-sm font-bold text-gray-900">${category.main_path || '待补'}</div>
+            <div class="text-xs text-gray-600 mt-2">${primary ? `候选: ${primary.name} / ${actionLabel(primary)}` : '暂无候选通道'}</div>
+          </div>
+          <div class="rounded border bg-amber-50 p-3">
+            <div class="text-xs font-semibold text-amber-700 mb-1">备选路径</div>
+            <div class="text-sm text-gray-900">${category.backup_path || '待补'}</div>
+            <div class="text-xs text-gray-600 mt-2">${(category.auxiliary || []).join(' / ') || '辅助能力待补'}</div>
+          </div>
+          <div class="rounded border bg-blue-50 p-3">
+            <div class="text-xs font-semibold text-blue-700 mb-1">可套用方案</div>
+            <div class="text-sm text-gray-900">${cases.map(c => c.name).join(' / ') || '暂无'}</div>
+            <div class="text-xs text-gray-600 mt-2">${cases[0]?.client_pricing_public || '需先补报价口径'}</div>
+          </div>
+        </div>
+        <div class="mt-4 grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div>
+            <div class="text-xs font-semibold text-gray-500 mb-2">推荐 Top 3</div>
+            <div class="space-y-2">
+              ${candidates.map(({d}, i) => `
+                <button class="w-full text-left flex items-center gap-2 rounded border bg-gray-50 hover:bg-white p-2" onclick="showDetail(${data.indexOf(d)})">
+                  <span class="decision-rank">${i + 1}</span>
+                  <span class="min-w-0 flex-1">
+                    <span class="block text-sm font-semibold text-gray-900 truncate">${d.name}</span>
+                    <span class="block text-xs text-gray-500">${d.gate} · ${d.rec} · ${riskLevel(d)}</span>
+                  </span>
+                </button>
+              `).join('') || '<div class="text-sm text-gray-400">暂无候选</div>'}
+            </div>
+          </div>
+          <div>
+            <div class="text-xs font-semibold text-gray-500 mb-2">推荐前必问</div>
+            ${tagList(category.required_gates, 'blue')}
+            <div class="text-xs font-semibold text-gray-500 mt-3 mb-2">主要风险</div>
+            ${tagList(category.risks, 'red')}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  root.innerHTML = `
+    <div class="space-y-5">
+      <div class="bg-white border rounded-lg p-5 shadow-sm">
+        <div class="flex items-start justify-between gap-4 flex-wrap">
+          <div>
+            <h2 class="text-xl font-bold text-gray-900">推荐工作台</h2>
+            <p class="text-sm text-gray-500 mt-1">从业务类型出发,快速生成首选路径、备选路径、可套用方案和必问问题。</p>
+          </div>
+          <button class="px-3 py-2 rounded bg-gray-900 text-white text-sm" onclick="setTab('categories')">查看业务类型库</button>
+        </div>
+      </div>
+      ${recommendationRows}
     </div>
   `;
 }
